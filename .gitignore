@@ -19,6 +19,8 @@ ORB_SLAM/ROS_SLAM/install*
 */frames.gv
 *.vscode*
 
+*.pdf
+*.ppt*
 */html/*
 *.fdb_*
 *.fls
