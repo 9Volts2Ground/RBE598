@@ -1,0 +1,47 @@
+%-----------------------------------------------------------------------------------
+\subsection{ Coordinate Frames }
+
+Several right-handed coordinate frames are defined and used throughout this project:
+
+\begin{itemize}
+    \item The odometry frame is used as the world-fixed coordinate frame. Both the extended Kalman filter (EKF) and the ORB\_SLAM3 algorithm estimate pose relative to this frame.
+
+    \item The ground frame is placed under the robot body frame and is a child of the odometry frame. Desired foot positions for the walking gait are calculated in this frame, since motion is dependant on foot contact with the ground rather than relative to the robot body.
+
+    \item The robot body frame is static relative to the hexapod chassis hardware and is referenced relative to the ground frame. The $\hat{x}_b$ direction points forward, the $\hat{y}_b$ direction points left (port side) of the body, and the $\hat{z}_b$ direction points straight up. This coordinate frame is located in the center of the robot belly such that this frame contacts and is parallel to the ground when $z_b = 0$.
+
+    \item The seeker frame is kinematically linked to the body via a two axis gimble, with the $\hat{x}$ direction pointing out from the seeker. The camera is statically mounted on the seeker, with its own coordinate frame whos $\hat{z}$ direction points out from the seeker and the $\hat{x}$ direction points to the robot starboard side. The transformation from body to camera frame is a function of seeker azimuth and elevation servo angles. Because the seeker gimble servos do not give encoder data back to the RPi, it is assumed that commanded joint angles are the true joint angles. This transformation is calculated as follows.
+
+    \[
+    T^b_c = T^b_n T^n_{az} T^{az}_{el} T^{el}_{c}
+    \]
+
+    \[
+    T^b_n = \begin{bmatrix} 0 & -1 & 0 & 0 \\
+                            1 & 0 & 0 & 0.0762 \\
+                            0 & 0 & 1 & 0.1386 \\
+                            0 & 0 & 0 & 1 \end{bmatrix}
+    \]
+    \[
+    T^n_{az} = \begin{bmatrix} \cos{az} & 0 & \sin{az} & 0 \\
+                               \sin{az} & 0 & -\cos{az} & 0 \\
+                               0 & 1 & 0 & 0 \\
+                               0 & 0 & 0 & 1 \end{bmatrix}
+    \]
+    \[
+    T^{az}_{el} = \begin{bmatrix} \cos{el} & 0 & -\sin{el} & L \cos{el} \\
+                                  \sin{el} & 0 & \cos{el} & L \sin{el} \\
+                                  0 & -1 & 0 & 0 \\
+                                  0 & 0 & 0 & 1\end{bmatrix}
+    \]
+
+    \[
+    T^{el}_{c} = \begin{bmatrix} 0 &  0 & 1 & 0 \\
+                                 0 & -1 & 0 & 0.0167 \\
+                                 1 &  0 & 0 & 0 \\
+                                 0 &  0 & 0 & 1 \end{bmatrix}
+    \]
+
+Where $L$ is the length of the gimble, and $az$ and $el$ are the azimuth and elevation angles, respectively. All angles are given in radians, and distance is given in meters.
+
+\end{itemize}
