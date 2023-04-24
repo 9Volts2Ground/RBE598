@@ -13,7 +13,7 @@ This project uses the Freenove Big Hexapod kit as the hardware base. This kit co
 The Raspberry Pi (RPi) 4 acts as the main processor of the robot assembly.  The RPi's CPU is a Broadcom BCM2711B0 with stock clock speeds of 1.5GHz, which has been over-clocked to 1.9 GHz for improved performance.  The model RPi used in this project includes 8MB of DDR RAM. A heat sink and active fan are used to keep CPU temperatures manageable during strenuous processing. The RPi is also setup to boot from an external SSD connected through USB 3.0, rather than the typical SD card boot hardware; this improves read-write speed and boot times.
 
 \begin{figure}[H]
-    \centerline{\includegraphics[scale=0.8]{methods/figures/pi1.png}}
+    \centerline{\includegraphics[scale=0.8]{04_methods/figures/pi1.png}}
     \caption{The Raspberry Pi 4 single-board computer}
     \label{fig:raspberry_pi}
 \end{figure}
@@ -30,7 +30,7 @@ A Raspberry Pi OV5647 infared night vision camera module is mounted to the seeke
 
 \begin{figure}[h]
     \centering
-    \includegraphics[scale=0.12]{methods/figures/camera.png}
+    \includegraphics[scale=0.12]{04_methods/figures/camera.png}
     \caption{Raspberry Pi OV5647 infared nigh vision camera module}
     \label{fig:raspberry_pi_cam}
 \end{figure}
@@ -40,7 +40,7 @@ A Raspberry Pi OV5647 infared night vision camera module is mounted to the seeke
 The HC-SR04 is an OTS ultrasonic range sensor mounted on the seeker and provides contactless ranging of objects from 2cm to 400cm away from the sensor \cite{hcsr04}.  The module emits a series of pulses at 40kHz that reflect on objects in front of the sensor. The sensor detects an echo reflected off an object, and the time between when the signal is sent and received can be used to estimate a range to the object. 
 
 \begin{figure}[h]
-    \centerline{\includegraphics[scale=0.12]{methods/figures/hc_sr04.png}}
+    \centerline{\includegraphics[scale=0.12]{04_methods/figures/hc_sr04.png}}
     \caption{HC-SR04 ultrasonic range sensor used on the Freenove Hexapod}
     \label{fig:HC-SR04}
 \end{figure}

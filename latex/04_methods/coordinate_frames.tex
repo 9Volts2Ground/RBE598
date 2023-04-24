@@ -1,7 +1,7 @@
 %-----------------------------------------------------------------------------------
 \subsection{ Coordinate Frames }
 
-Several right-handed coordinate frames are defined and used throughout this project:
+Several right-handed cartesian coordinate frames are defined and used throughout this project. These transforms are managed in software via the ROS tf2 package <insert citation here>, and are summarized as follows:
 
 \begin{itemize}
     \item The odometry frame is used as the world-fixed coordinate frame. Both the extended Kalman filter (EKF) and the ORB\_SLAM3 algorithm estimate pose relative to this frame.
