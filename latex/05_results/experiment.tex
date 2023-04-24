@@ -1,4 +1,0 @@
-%==============================================================================
-\section{Experiment}
-
-The robot was placed in an unobstructed environment with objects to detect of different colors and shapes. The desktop computer started the ROS core, and the robot processor connected to this core. The robot then booted up the hardware sensor and actuator nodes, and the desktop computer kicked off all other ROS nodes, including the ORB-SLAM node. The user then commanded the robot to move around the room using an Xbox controller. As video data transmits from the camera mounted on the robot to the desktop computer, the ORB-SLAM3 node processed the data and outputs a point map of the environment and the estimated robot pose. Simultaneously, the IMU data and the commanded twist vector were used to estimate the robot pose in the EKF.
