@@ -1,11 +1,7 @@
 \subsection{ Body Pose Control }
 The following gain values were chosen through hand-tuning the system for speed and minimal overshoot. 
 
-\begin{itemize}
-    \item $K_p = 1.0$
-    \item $K_d = 0.02$
-    \item $K_I = 0.02$
-\end{itemize}
+\[K_p = 1.0, K_d = 0.02, K_I = 0.02\]
 
 The body pose successfully achieves the desired orientation relative to gravity, despite the noisy sensor data. Even though the system as a whole has a high degree of dynamic complexity, the approach to commanding the body pose results in this controller behaving as expected when tuning a classical PID controller. An example system response can be seen in Figure \ref{fig:pose_control_response}. 
 

@@ -33,14 +33,19 @@ While the a priori map is useful for maneuvering around known static obstacles, 
 While the ultrasonic range sensor beam has a wide field of view (FOV), it can still only sense with a limited space. To help the robot "look ahead", a seeker gimbal search system was set up. The nominal seeker gimbal angles are calculated based on the commanded walking twist $\xi_g$. The azimuth angle $\eta$ is set to look in the direction the robot is walking, with extra bias if the robot is turning, as follows.
 
 \begin{equation}
-    \eta = \arctan( \frac{ \xi_y }{\xi_z} ) + 0.75 \xi_{\psi}
+    \eta = \arctan( \frac{ \xi_y }{\xi_z} ) + K_{\psi} \xi_{\psi}
 \end{equation}
 
-To minimize the chance of ground clutter return, the nominal elevation angle $\nu$ is set to point the seeker up off the ground. 
+where $K_{\psi}=0.75$ linearly scales the azimuth angle based on how fast the robot is spinning. To minimize the chance of ground clutter return, the nominal elevation angle $\nu$ is set to point the seeker up off the ground. 
 
-To search for a wide field of view in front of the robot, these nominal gimbal angles are linearly modulated. $\eta$ is dithered with a $\pm 20^{\circ}$ field of view, sweeping at a rate of $7^{\circ}/s$. $\nu$ is similarly dithered with a $\pm 6^{\circ}$ field of veiw at a rate of $12^{\circ}/s$. This allows the robot to look across more area in azimuth, while quickly searching up and down for obstacles. 
+To search for a wide field of view in front of the robot, these nominal gimbal angles are linearly modulated. $\eta$ is dithered with a $\pm 20^{\circ}$ field of view, sweeping at a rate of $7^{\circ}/s$. $\nu$ is similarly dithered with a $\pm 6^{\circ}$ field of veiw at a rate of $12^{\circ}/s$. This allows the robot to look across more area in azimuth, while quickly searching up and down for obstacles. These seeker angles are the run through a simple first order digial low pass filter (LPF) to prevent large step change commands being sent to the servos. 
 
 %------------------------------------------------
 \subsubsection{ Path Following }
 
 To calcualte a commanded velocity vector $\xi_g$, the ROS Move Base node was used \cite{movebase}. This node uses the global map, the estimated robot pose from odometry, and measured obstacles to calculate both global and local paths for the robot to follow. These paths are constantly updated to give new commands to the robot. This node is designed to modularly accept different types of sensor data, as well as motion planning plugins. Only the default plugins were used for this project.
+
+%------------------------------------------------
+\subsubsection{ Pose Initialization and Commands }
+
+The EKF solution needs to be initialized to a true location relative to the map. Rviz in ROS \cite{rviz} has a built-in tool for this. With the click of a button, users can place and orient the "true" robot pose directly on the map, and that pose will be published to the $initilapose$ ROS topic. The Robot Localization EKF subscribes to that topic to snap update the filter solution to the true location. Rviz has a similar tool to publish a goal pose. Users can click and orient the deisred pose, which is published to the $move\_base/goal$ ROS topic, which $move\_base$ subscribes to and begins solving. 
