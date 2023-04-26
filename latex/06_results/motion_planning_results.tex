@@ -1,0 +1,27 @@
+%------------------------------------------------
+\subsection{ Motion Planning }
+
+After tuning the Navigation Stack parameters, the robot was able to successfully navigate from one pose to another in the global map in emulation, as can be seen in Figure \ref{fig:sim_path_following}. This was done using simple modeled IMU data to feed the EKF, and the system was run assuming that the odometry solution from the EKF is truth. No range sensor data is published, because obstacles were not modeled to return emulated sensor data. 
+
+\begin{figure}[H]
+    \centerline{\includegraphics[scale=0.25]{place_holder.png}}
+    \caption{Successful path following with perfect odometry in Rviz}
+    \label{fig:sim_path_following}
+\end{figure}
+
+The robot was less successful when implementing this approach on hardware. While this system seemed to work adequately for short distances and time scales, the EKF solution eventually drifts from the true pose of the robot, which occasionally results in velocity commands being sent to the robot that drive it into an obstacle rather than following the desired path. 
+
+\begin{figure}[H]
+    \centerline{\includegraphics[scale=0.25]{place_holder.png}}
+    \caption{Unsuccessful path following on hardware}
+    \label{fig:hardware_path_following}
+\end{figure}
+
+The range sensor also proved to often hinder successful path following rather than aid it. The simple coherance filter often prevented real obstacles from populating on the map, allowing the robot to walk into obstacles undetected. However, the filter was not always sufficient to prevent clutter from being passed to the navigation stack. The robot would often detect environment effects and report them as obstacles despite there being room for the robot to walk. This would cause an artificial obstacle barrier to be set in the local costmap, preventing the robot from navigating to the desired goal \ref{fig:clutter_barrier}. 
+
+\begin{figure}[H]
+    \centerline{\includegraphics[scale=0.25]{place_holder.png}}
+    \caption{Obstacle clutter can obstruct local path following}
+    \label{fig:clutter_barrier}
+\end{figure}
+

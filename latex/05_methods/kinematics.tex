@@ -48,7 +48,7 @@ Once the desired body pose is calculated and accepted as valid, the actual strid
 As the commanded body pose changes, the workspace of all feet changes to ensure the body does not collide with the feet and the feet can reach anywhere inside their workspace. 
 
 %------------------------------------------------
-\subsection{ Dynamic Workspace Centers $\vec{F}_c$ }
+\subsection{ Dynamic Workspace Centers }
 The location of the workspace centers $\vec{F}_c$ need not be static. As these positions change, a new $F_{min}$ and $F_{max}$ must be recomputed as above, and the stride length $r$ should similarly be updated. Feasible values of $\vec{F}_c$ should be checked before updating them, by ensuring $\vec{F}_c$ is within reach of the foot. This project allows $\vec{F}_c$ to be incremented along $\hat{S}$, but other applications may move this elsewhere, like for maneuvering over rough terrain as in \cite{foot_placement}. 
 
 
