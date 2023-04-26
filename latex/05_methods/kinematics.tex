@@ -1,3 +1,55 @@
-\subsection{ Kinematics }
+%------------------------------------------------
+\subsection{ Body Pose Kinematic Constraints }
 
-Describe body pose kinematics here
+The over-actuated nature of hexapod robots provides opportunity for great flexibility in controling the body pose orientation, in addition to manipulating the legs. However, kinematically infeasible configurations could easily be commanded to the system. If not well handled, these unachievable body poses could cause errors in inverse kinematic calculations, singularities in the legs, or conflicts in leg and body workspaces. This paper presents a simple geometry-based system to dynamically constrain and maximize the body pose and feet workspaces to feasilbe configurations. This system builds on the gait design and inverse kinematics previously described. 
+
+First, the center of each foot's workspace, $\vec{F}_c$, must be defined, where the workspace is a circle with radius $R$. For this system, $\vec{F}_c$ is set along the unit vector from the body center each legs shoulder, $\hat{S}$, a distance of of $L_1 + L_2$ away from the shoulder, where $L_1$ is the coxa length and $L_2$ is the femur. Note that $R$ is the same for all legs. 
+
+\begin{figure}[H]
+    \centerline{\includegraphics[scale=0.3]{place_holder.png}}
+    \caption{Foot workspace}
+    \label{fig:foot_workspace}
+\end{figure}
+
+The maximum feasible workspace radius $R_{max}$ is then set as the minimum of the following constraints:
+
+\begin{itemize}
+    \item The workspaces shall not overlap, ensuring the feet do not contact each other while walking. 
+    \item The workspace shall not overlap with the coxa, ensuring the feet do not go under the first joint. This is done both for system stability and for ease in solving inverse kinematics. 
+    \item The outer edge of the workspace must be reachable by the foot given an identity body pose with the belly on the ground, so it must be at most $L_2 + L_3$ away from the second joint, where $L_3$ is the length of the tibia. 
+\end{itemize}
+
+Using the above conditions, the workspace radius $R_{max}$ could be such that the leg must be fully extended for the foot to reach the outside edge of the workspace. This results in an undesirable joint singularity. To avoid this, the chosen magnitude of $R_{max}$ is scaled down by some value $<1$; this project chose to scale by $0.9$.
+
+In addition to the maximum foot workspace, the minimum workspace $R_{min}$ must also be defined. This ensures that the feet have some room to move while walking. This project sets $R_{min}$ as half the size of $R_{max}$. 
+
+These minimum and maximum workspace bounds for all feet are used to check if a desired body pose configuration is valid. To prevent an invalid body pose command, all desired body pose hypothesis must pass all of the following conditions:
+
+\begin{itemize}
+    \item The belly of the robot cannot collide with the ground. The $z$ element of each shoulder position in the body frame cannot be less than 0 when transformed to the ground frame. 
+    \item The maximum edge of each footspace must be within reach of each leg (must be less than distance $L_2 + L_3$ away from the knee joint, $q_2$).
+    \item The knee joint of each leg must not be less than $L_1$ away from the closest point on the minimum workspace projected into the planar shoulder frame, ensuring the foot does not go under the coxa.
+\end{itemize}
+
+If all of these conditions are met for all legs, the desired body pose is treated as valid and allowed to be sent to the rest of the system. 
+
+%------------------------------------------------
+\subsection{ Dynamic Stride Length }
+
+Once the desired body pose is calculated and accepted as valid, the actual stride length $r$ for all of the legs must be set, bounded between $R_{min} \le R_{max}$. Two bounds are checked to set $r$, with the smallest result being the new actual stride length:
+
+% ToDo: should probably fill in equations here
+\begin{itemize}
+    \item The distance on the ground from $\vec{F}_c$ to the knee joint, projected onto the ground. The smallest value for all legs is chosen.
+
+    \item The farthest each leg can reach out from $\vec{F}_c$, with the shortest reach being used. 
+\end{itemize}
+
+As the commanded body pose changes, the workspace of all feet changes to ensure the body does not collide with the feet and the feet can reach anywhere inside their workspace. 
+
+%------------------------------------------------
+\subsection{ Dynamic Workspace Centers $\vec{F}_c$ }
+The location of the workspace centers $\vec{F}_c$ need not be static. As these positions change, a new $F_{min}$ and $F_{max}$ must be recomputed as above, and the stride length $r$ should similarly be updated. Feasible values of $\vec{F}_c$ should be checked before updating them, by ensuring $\vec{F}_c$ is within reach of the foot. This project allows $\vec{F}_c$ to be incremented along $\hat{S}$, but other applications may move this elsewhere, like for maneuvering over rough terrain as in \cite{foot_placement}. 
+
+
+

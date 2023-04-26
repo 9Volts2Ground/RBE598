@@ -1,15 +1,36 @@
+%------------------------------------------------
 \subsection{ Motion Planning }
 
-Motion planning
+To take advantage of the mobility of this hexapod robot, a global motion planning approach was implemented, built on the open source ROS1 Navigation Stack \cite{navstack}.
 
-\subsubsection { Map }
+%------------------------------------------------
+\subsubsection{ Map }
+This 2D motion planning scheme takes advantage of an a priori environment map. An approximate map of my appartment was created using a published floor plan, with furnature and other static obstacles added. This map is saved as a $.jpg$ file and loaded into a ROS map server \cite{mapserver}. This is used to generate a global cost map to inform global motion planning. 
 
-\subsubsection { Odometry }
+%------------------------------------------------
+\subsubsection{ Odometry }
+For continuous navigation, the open source Robot Localization ROS package \cite{robotlocalization} was used to implement an extended Kalman filter (EKF). This filter is fed a commanded twist velocity vector $\xi_g$ in the ground frame, as well as IMU sensor data, and estimates the robot's pose relative to a fixed odometry frame over time.
 
-For continuous body pose estimation, the robot\_localization ROS package \cite{robotlocalization} was used to implement an extended Kalman filter (EKF). This filter receives the commanded twist vector in the ground frame, as well as IMU sensor data in the body frame, and estimates the robot's pose relative to the fixed odometry frame over time.
+This filter is tuned primarily by the covariance matrices $\sigma^2$ for each data source. The smaller the covariance for a given input source, the more the filter will bias towards that measurement. A custom ROS node was written in C++ to dynamically calculate the covariance of the linear $x$ and $y$ and angular yaw $\psi$ components of the commanded walking velocity. If any component is commanded to be less than some small value, its uncertainty $\sigma$ is set small. Otherwise, the uncertainty is proportional to the magnitude of the velocity. The full 6x6 covariance matrix is the calculated as follows.
 
-\subsubsection { Path Following }
+\begin{equation}
+    \sigma^2 = 
+    \begin{bmatrix} 
+        \sigma_x^2 & \sigma_x \sigma_y & 0 & \ldots & 0 & \sigma_x \sigma_{\psi} \\
+        \sigma_x \sigma_y & \sigma_y^2 & 0 & \ldots & 0 & \sigma_y \sigma_{\psi} \\
+        \vdots &  &  & \ddots &  &  \\
+        \sigma_x \sigma_{\psi} & \sigma_y \sigma_{\psi} & 0 & ... & 0 & \sigma_{\psi}^2 
+    \end{bmatrix}
+\end{equation}
 
-\subsubsection { Obstacle Avoidance }
+The IMU data is similarly weighted by its covariance matrix, but this is not set dynamically. Instead, the magnitude of each sensor channel (accelerometer and gyrometer) is set statically and is based on the expected noise level of the sensor hardware. 
 
-Talk about the seeker here
+%------------------------------------------------
+\subsubsection{ Obstacle Avoidance }
+
+While the a priori map is useful for maneuvering around known static obstacles, the robot must be able to avoid obstacles not present on the map. The ultrasonic range sensor is used for this purpose. This sensor is polled at a rate of 20Hz. A simple filter is then applied using a custom ROS node written in C++. To prevent spurious detections from confusing the system with fake obstacles, this maintains a rolling average of sensor observables. If 10 observables in a row are within a set range tolerance from each other, then it is assumed there is a real obstacle present. These observables are averaged to create a point in space. To account for the wide ($30^{\circ}$) sensor beam, four additional points are added at the presumed edge of this beam, resulting in one point cloud for each integrated measurement. This point cloud is then published and passed into the navigation stack as an obstacle to avoid. 
+
+%------------------------------------------------
+\subsubsection{ Path Following }
+
+To calcualte a commanded velocity vector $\xi_g$, the ROS Move Base node was used \cite{movebase}. This node uses the global map, the estimated robot pose from odometry, and measured obstacles to calculate both global and local paths for the robot to follow. These paths are constantly updated to give new commands to the robot. 

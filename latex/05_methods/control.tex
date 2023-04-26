@@ -1,3 +1,33 @@
+%------------------------------------------------
 \subsection{ Body Pose Control }
 
-Describe body pose control
+With the body pose constrained to kinematically feasible limits, a body pose controller can be implemented without fear of corrupting the kinematics. A PID controller was designed to maintain a desired roll $\theta_c$ and pitch $\phi_c$ orientation relative to gravity. 
+
+%------------------------------------------------
+\subsubsection{ State Feedback }
+The embedded IMU is used to provide state feedback on the current body pose orientation relative to gravity. The raw IMU data is filtered using an open source Complementary Filter ROS node \cite{complementaryfilter}. This node estimates the inertial orientation of the IMU relative to gravity. The measured roll $\theta_m$ and pitch $\phi_m$ channels are extracted from the quaternion orientation estimate. Yaw is ignored because the IMU does not have a magnetometer, which is important in providing an absolute yaw orientation estimate. 
+
+%------------------------------------------------
+\subsubsection{ Controller Design }
+A classic PID controller is set up to obtain the desired inertial roll and pitch angles relative to gravity. After extracting desired and measured Euler angles from the quaternian-based commanded and measured orientations, the adjusted angles are calculated at new time $t+1$ as follows.
+
+% Error
+\begin{equation}
+    \Delta \theta_t = \theta_m - \theta_c
+\end{equation}
+
+% Deriv
+\begin{equation}
+    \Delta \dot{\theta}_t = \frac{ \Delta \theta_t - \Delta \theta_{t-1}}{\Delta t}
+\end{equation}
+
+% Integral
+\begin{equation}
+    \int \theta_t = \int \theta_{t-1} + \theta_t \Delta t
+\end{equation}
+
+\begin{equation}
+    \theta_{t+1} = \theta_{t} +  \Delta \theta_t K_p + \Delta \dot{\theta}_t K_d + \int \theta_t K_I
+\end{equation}
+
+Where $K_p$, $K_d$, and $K_I$ are the controller gains. Compensated roll and pitch angles are calcualted in the same manner. These angles, along with an uncompensated yaw angle, are then reconverted into quaternian form. This new compensated pose is then checked for validity as above, and if it is valid this new pose is sent to the rest of the system. This new pose is passed to the system using the ROS tf2 coordinate transformation manager \cite{tf2}.
