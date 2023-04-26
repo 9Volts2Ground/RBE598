@@ -1,0 +1,6 @@
+%-----------------------------------------------------------------------------------
+\subsection{ Software }
+
+The RPi embedded on the robot runs with the Ubuntu Mate 20.04 LTS operating system. All control software for the robot is written as ROS1 Noetic nodes, written in Python and C++. Nodes are broken up between hardware control, gait manipulation, and analytical or sensor processing.
+
+In order to facilitation motion through the space we wish to map, a master controller node receives input from an Xbox controller to determine the desired body motion. This node outputs a twist vector and a body pose relative to the ground, as well as seeker gimble angles. The gait update node receives the twist vector and calculates new desired foot positions. An inverse kinematics node then calculates new joint angles, which are received by the motor driver node to actuate the servo motors.
