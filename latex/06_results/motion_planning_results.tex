@@ -4,7 +4,7 @@
 After tuning the Navigation Stack parameters, the robot was able to successfully navigate from one pose to another in the global map in emulation, as can be seen in Figure \ref{fig:sim_path_following}. This was done using simple modeled IMU data to feed the EKF, and the system was run assuming that the odometry solution from the EKF is truth. No range sensor data is published, because obstacles were not modeled to return emulated sensor data. 
 
 \begin{figure}[H]
-    \centerline{\includegraphics[scale=0.25]{place_holder.png}}
+    \centerline{\includegraphics[scale=0.14]{./06_results/figures/successful_motion_planning.png}}
     \caption{Successful path following with perfect odometry in Rviz}
     \label{fig:sim_path_following}
 \end{figure}
@@ -12,24 +12,25 @@ After tuning the Navigation Stack parameters, the robot was able to successfully
 The robot was less successful when implementing this approach on hardware. While this system seemed to work adequately for short distances and time scales, the EKF solution eventually drifts from the true pose of the robot, which occasionally results in velocity commands being sent to the robot that drive it into an obstacle rather than following the desired path. 
 
 \begin{figure}[H]
-    \centerline{\includegraphics[scale=0.25]{place_holder.png}}
-    \caption{Unsuccessful path following on hardware}
+    \centerline{\includegraphics[scale=0.083]{./06_results/figures/unsuccessful_motion_planning.png}}
+    \caption{Unsuccessful path following on hardware, with false clutter detections obstructing the path}
     \label{fig:hardware_path_following}
 \end{figure}
 
-This drifting is in part due to the noisy IMU sensor. While this sensor was fed into the EKF, its high noise content and discontinuities while walking, as seen in Figure \ref{fig:imu_data}, required its covariance matrix to be large relative to the commanded velocity, or the EKF solution would drift randomly. This prevented the IMU from being able to meaningfully compensate for foot slippage, allowing the filter to drift from truth. 
+This drifting is in part due to the noisy IMU sensor. While this sensor was fed into the EKF, its high noise content and discontinuities while walking, as seen in Figures \ref{fig:acc_data} and \ref{fig:gyro_data}, required its covariance matrix to be large relative to the commanded velocity, or the EKF solution would drift randomly. This prevented the IMU from being able to meaningfully compensate for foot slippage, allowing the filter to drift from truth. 
 
 \begin{figure}[H]
-    \centerline{\includegraphics[scale=0.25]{place_holder.png}}
-    \caption{Example IMU accelerometer and gyrometer measurements during walking}
-    \label{fig:imu_data}
+    \centerline{\includegraphics[scale=0.1]{06_results/figures/accel_data.png}}
+    \caption{Example IMU accelerometer measurements during walking}
+    \label{fig:acc_data}
 \end{figure}
-
-The range sensor also proved to often hinder successful path following rather than aid it. The simple coherance filter occasionally prevented real obstacles from populating on the map, allowing the robot to walk into obstacles undetected. However, the filter was not always sufficient to prevent clutter from being passed to the navigation stack. The robot would often detect environment effects and report them as obstacles despite there being room for the robot to walk. This would cause an artificial obstacle barrier to be set in the local costmap, preventing the robot from navigating to the desired goal \ref{fig:clutter_barrier}. 
 
 \begin{figure}[H]
-    \centerline{\includegraphics[scale=0.25]{place_holder.png}}
-    \caption{Obstacle clutter can obstruct local path following}
-    \label{fig:clutter_barrier}
+    \centerline{\includegraphics[scale=0.11]{06_results/figures/gyro_data.png}}
+    \caption{Example IMU gyrometer measurements during walking}
+    \label{fig:gyro_data}
 \end{figure}
+
+The range sensor also proved to often hinder successful path following rather than aid it. The simple coherance filter occasionally prevented real obstacles from populating on the map, allowing the robot to walk into obstacles undetected. However, the filter was not always sufficient to prevent clutter from being passed to the navigation stack. The robot would often detect environment effects and report them as obstacles despite there being room for the robot to walk. This would cause an artificial obstacle barrier to be set in the local costmap, preventing the robot from navigating to the desired goal as seen in Figure \ref{fig:hardware_path_following}. 
+
 

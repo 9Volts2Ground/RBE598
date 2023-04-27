@@ -28,7 +28,7 @@ The robot uses a forward wave gait to walk. The system receives a commanded velo
 The pose of the body can be independently controlled from the feet trajectories. This pose is calculated relative to the ground frame under the robot. The desired position of each foot and the body pose are then both passed to a simple inverse kinematics solver, which returns the commanded joint angles. Thes angles are then sent to the servos to actuate the robot. This scheme can be seen in Figure \ref{fig:old_gait_block_diagram}.
 
 \begin{figure}[H]
-    \centerline{\includegraphics[scale=0.1]{./03_related_work/figures/previous_kinematic_chain.png}}
+    \centerline{\includegraphics[scale=0.09]{./03_related_work/figures/previous_kinematic_chain.png}}
     \caption{Previous walking gait design block diagram}
     \label{fig:old_gait_block_diagram}
 \end{figure}
