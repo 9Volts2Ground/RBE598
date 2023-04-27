@@ -5,13 +5,13 @@ To take advantage of the mobility of this hexapod robot, a global motion plannin
 
 %------------------------------------------------
 \subsubsection{ Map }
-This 2D motion planning scheme takes advantage of an a priori environment map. An approximate map of my appartment was created using a published floor plan, with furnature and other static obstacles added. This map is saved as a $.jpg$ file and loaded into a ROS map server \cite{mapserver}. This is used to generate a global cost map to inform global motion planning.
+This 2D motion planning scheme takes advantage of an a priori environment map. An approximate map of the environment was created using a published floor plan, with furnature and other static obstacles added. This map is saved as a $.jpg$ file and read in using the ROS map server \cite{mapserver}. This is used to generate a global cost map to inform global motion planning.
 
 %------------------------------------------------
 \subsubsection{ Odometry }
-For continuous navigation, the open source Robot Localization ROS package \cite{robotlocalization} was used to implement an extended Kalman filter (EKF). This filter is fed a commanded twist velocity vector $\xi_g$ in the ground frame, as well as IMU sensor data, and estimates the robot's pose relative to a fixed odometry frame over time.
+For continuous navigation, the open source Robot Localization ROS package \cite{robotlocalization} was used to implement an extended Kalman filter (EKF) for pose estimation. This filter is fed a commanded twist velocity vector $\xi_g$ in the ground frame, as well as IMU sensor data, and estimates the robot's pose relative to a fixed odometry frame over time.
 
-This filter is tuned primarily by the covariance matrices $\sigma^2$ for each data source. The smaller the covariance for a given input source, the more the filter will bias towards that measurement. A custom ROS node was written in C++ to dynamically calculate the covariance of the linear $x$ and $y$ and angular yaw $\psi$ components of the commanded walking velocity. If any component is commanded to be less than some small value, its uncertainty $\sigma$ is set small. Otherwise, the uncertainty is proportional to the magnitude of the velocity. The full 6x6 covariance matrix is the calculated as follows.
+This filter is tuned primarily by the covariance matrices $\sigma^2$ for each data source. The smaller the covariance for a given input source, the more the filter will bias towards that measurement. A custom ROS node was written in C++ to dynamically calculate the covariance of the linear $x$ and $y$ and angular yaw $\psi$ components of the commanded walking velocity. If any component is commanded to be less than some small value, its uncertainty $\sigma$ is set very small. Otherwise, the uncertainty is proportional to the magnitude of the velocity. The full 6x6 covariance matrix is the calculated as follows.
 
 \begin{equation}
     \sigma^2 =
@@ -23,14 +23,17 @@ This filter is tuned primarily by the covariance matrices $\sigma^2$ for each da
     \end{bmatrix}
 \end{equation}
 
-The IMU data is similarly weighted by its covariance matrix, but this is not set dynamically. Instead, the magnitude of each sensor channel (accelerometer and gyrometer) is set statically and is based on the expected noise level of the sensor hardware.
+The IMU data is similarly weighted by its covariance matrix, but this is not set dynamically. Instead, the magnitude of each sensor channel (accelerometer and gyrometer) is set statically and tuned based on the expected noise level of the sensor hardware.
 
 %------------------------------------------------
 \subsubsection{ Obstacle Avoidance }
 
-While the a priori map is useful for maneuvering around known static obstacles, the robot must be able to avoid obstacles not present on the map. The ultrasonic range sensor is used for this purpose. This sensor is polled at a rate of 20Hz. A simple filter is then applied using a custom ROS node written in C++. To prevent spurious detections from confusing the system with fake obstacles, this maintains a rolling average of sensor observables. If 10 observables in a row are within a set range tolerance from each other, then it is assumed there is a real obstacle present. These observables are averaged to create a point in space. To account for the wide ($30^{\circ}$) sensor beam, four additional points are added at the presumed edge of this beam, resulting in one point cloud for each integrated measurement. This point cloud is then published and passed into the navigation stack as an obstacle to avoid.
+While the a priori map is useful for maneuvering around known static obstacles, the robot must be able to avoid obstacles not present on the map. The ultrasonic range sensor is used for this purpose. This sensor is polled at a rate of 20Hz. A simple filter is applied to the observables using a custom ROS node written in C++. To prevent spurious detections from confusing the system with fake obstacles, this filter maintains a rolling average of sensor observables. If 10 valid observables in a row are within a set range tolerance from each other, then it is assumed there is a real obstacle present. These observables are averaged to create a point in space. To account for the wide ($30^{\circ}$) sensor beam, four additional points are added at the presumed edge of this beam, resulting in one point cloud for each integrated measurement. This point cloud is then published and passed into the navigation stack as an obstacle to avoid.
 
-While the ultrasonic range sensor beam has a wide field of view (FOV), it can still only sense with a limited space. To help the robot "look ahead", a seeker gimbal search system was set up. The nominal seeker gimbal angles are calculated based on the commanded walking twist $\xi_g$. The azimuth angle $\eta$ is set to look in the direction the robot is walking, with extra bias if the robot is turning, as follows.
+%------------------------------------------------
+\subsubsection{ Seeker Control }
+
+While the ultrasonic range sensor beam has a wide field of view (FOV), it can still only sense within a limited space. To help the robot "look ahead", a seeker gimbal search system was set up. The nominal seeker gimbal angles are calculated based on the commanded walking twist $\xi_g$. The azimuth angle $\eta$ is set to look in the direction the robot is walking, with extra bias if the robot is turning, as follows.
 
 \begin{equation}
     \eta = \arctan( \frac{ \xi_y }{\xi_z} ) + K_{\psi} \xi_{\psi}
@@ -38,14 +41,14 @@ While the ultrasonic range sensor beam has a wide field of view (FOV), it can st
 
 where $K_{\psi}=0.75$ linearly scales the azimuth angle based on how fast the robot is spinning. To minimize the chance of ground clutter return, the nominal elevation angle $\nu$ is set to point the seeker up off the ground. 
 
-To search for a wide field of view in front of the robot, these nominal gimbal angles are linearly modulated. $\eta$ is dithered with a $\pm 20^{\circ}$ field of view, sweeping at a rate of $7^{\circ}/s$. $\nu$ is similarly dithered with a $\pm 6^{\circ}$ field of veiw at a rate of $12^{\circ}/s$. This allows the robot to look across more area in azimuth, while quickly searching up and down for obstacles. These seeker angles are the run through a simple first order digial low pass filter (LPF) to prevent large step change commands being sent to the servos. 
+To search for a wide field of view in front of the robot, these nominal gimbal angles are linearly modulated. $\eta$ is dithered with a $\pm 20^{\circ}$ field of view, sweeping at a rate of $7^{\circ}/s$. $\nu$ is similarly dithered with a $\pm 6^{\circ}$ field of veiw at a rate of $12^{\circ}/s$. This allows the robot to look across more area in azimuth, while quickly searching up and down for obstacles. These seeker angles are then run through a simple first order digial low pass filter (LPF) to prevent large step change commands being sent to the servos. 
 
 %------------------------------------------------
 \subsubsection{ Path Following }
 
-To calcualte a commanded velocity vector $\xi_g$, the ROS Move Base node was used \cite{movebase}. This node uses the global map, the estimated robot pose from odometry, and measured obstacles to calculate both global and local paths for the robot to follow. These paths are constantly updated to give new commands to the robot. This node is designed to modularly accept different types of sensor data, as well as motion planning plugins. Only the default plugins were used for this project.
+To calcualte a commanded velocity vector $\xi_g$, the ROS Move Base node was used \cite{movebase}. This node uses the global map, the estimated robot pose from odometry, and measured obstacles to calculate both global and local paths for the robot to follow. These paths are constantly updated to give new commands to the robot. This node is designed to modularly accept different types of sensor data, as well as motion planning plugins. Only the default plugins were used for this project. To protect the servos from large step changes in desired velocity, the commanded velocity vector $\xi_g$ is run through a simple digital LPF to smooth out the system commands before sending them to the foot trajectory update system. 
 
 %------------------------------------------------
 \subsubsection{ Pose Initialization and Commands }
 
-The EKF solution needs to be initialized to a true location relative to the map. Rviz in ROS \cite{rviz} has a built-in tool for this. With the click of a button, users can place and orient the "true" robot pose directly on the map, and that pose will be published to the $initilapose$ ROS topic. The Robot Localization EKF subscribes to that topic to snap update the filter solution to the true location. Rviz has a similar tool to publish a goal pose. Users can click and orient the deisred pose, which is published to the $move\_base/goal$ ROS topic, which $move\_base$ subscribes to and begins solving. 
+The EKF solution needs to be initialized to a true location relative to the map. Rviz in ROS \cite{rviz} has a built-in tool for this. With the click of a button, users can place and orient the "true" robot pose directly on the map, and that pose will be published to the $initialpose$ ROS topic. The Robot Localization EKF subscribes to that topic to snap update the filter solution to the true location. Rviz has a similar tool to publish a goal pose. Users can click and orient the deisred pose, which is published to the $move\_base/goal$ ROS topic, which $move\_base$ subscribes to and begins solving. 
