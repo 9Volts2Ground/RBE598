@@ -1,8 +1,7 @@
 %==============================================================================
 \section{Related Work}
 
-Hexapod mobility is a well solved problem. 
-% ToDo: fill in different papers here
+The fundamentals kinematics and motion of mobile hexapod robots are well understood in the literature \cite{foot_trajectory} \cite{agheli}. Body pose estimation is done using various sensor schemes \cite{poseestimate}. With robust locomotion possible, omni-directional motion planning has been implemented on hexapod robots before \cite{obstacle} \cite{roughterrain}. 
 
 \subsection{ Previous Projects }
 
@@ -18,9 +17,8 @@ Wanda has been used as a project platform by the author since summer 2021 for gr
 
 The robot uses a forward wave gait to walk. The system receives a commanded velocity twist vector defined in the ground frame below the robot, $\xi_g$, with linear $x$ and $y$ and angular yaw $\psi$ components. A gait trajectory algorithm increments the position of each foot by translating and inverting this twist into each foots current position and integrating with the time step $dt$. Transition between stride and support phase is scheduled by incrementing a master stride phase based on how far all of the feet move away from the center of their workspaces. When a foot enters stride phase, the foot is picked up off the ground and moved back to the center of its workspace relative to the ground frame. This motion is executed as a polynomial trajectory with zero initial and final velocity and acceleration in the $\hat{z}$ direction. 
 
-% ToDo: put a picture of this type of motion here?
 \begin{figure}[H]
-    \centerline{\includegraphics[scale=0.1]{./03_related_work/figures/old_trajectory.png}}
+    \centerline{\includegraphics[scale=0.09]{./03_related_work/figures/old_trajectory.png}}
     \caption{Foot trajectory for simple forward walking gait}
     \label{fig:old_gait}
 \end{figure}
