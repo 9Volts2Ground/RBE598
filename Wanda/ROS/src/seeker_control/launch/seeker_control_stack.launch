@@ -1,0 +1,42 @@
+<launch>
+
+    <!-- Choose which type of controller to use -->
+    <!-- Acceptable options: track_color, manual, look_ahead -->
+    <arg name="controller" default="track_color" />
+
+    <!-- Decide if you want the seeker to dither or not -->
+    <arg name="dither" default="false" />
+
+    <!-- Update seeker pose from controller input -->
+    <include file="$(find seeker_control)/launch/seeker_control.launch" >
+        <arg name="controller" value="$(arg controller)" />
+    </include>
+
+    <!-- Determine if we want to dither the seeker angles -->
+    <group if="$(arg dither)">
+
+        <!-- Run the node to dither the seeker -->
+        <include file="$(find seeker_control)/launch/seeker_dither.launch">
+            <arg name="topic_in" value="seeker/nominal"/>
+            <arg name="topic_out" value="seeker/search" />
+        </include>
+
+        <!-- Run the filter node accepting the dithered commands -->
+        <include file="$(find seeker_control)/launch/seeker_filter.launch">
+            <arg name="topic_in" value="seeker/search"/>
+            <arg name="topic_out" value="seeker/filtered" />
+        </include>
+    </group>
+
+
+    <!-- We do not want to dither the seeker, just filter the angles -->
+    <group unless="$(arg dither)">
+
+        <!-- Run the filter node accepting the dithered commands -->
+        <include file="$(find seeker_control)/launch/seeker_filter.launch">
+            <arg name="topic_in" value="seeker/nominal"/>
+            <arg name="topic_out" value="seeker/filtered" />
+        </include>
+    </group>
+
+</launch>

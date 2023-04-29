@@ -1,0 +1,8 @@
+# Define the goal
+float32 increment_mag
+---
+# Define the result
+bool updated
+---
+# Define the feedback info
+# Don't bother sending anything back for now

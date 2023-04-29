@@ -1,0 +1,11 @@
+<launch>
+    <!-- This node interprets the game controller commands into a walk twist -->
+    <node
+        pkg="manual_control"
+        name="manual_increment_foot_center_node"
+        type="manual_increment_foot_center_node.py"
+        output="screen"
+    >
+        <param name="increment_mag" value="0.0005"/>
+    </node>
+</launch>

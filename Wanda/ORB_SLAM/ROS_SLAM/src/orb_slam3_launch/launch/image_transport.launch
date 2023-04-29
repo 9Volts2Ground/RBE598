@@ -1,0 +1,9 @@
+<launch>
+    <node
+        pkg="image_transport"
+        name="republish"
+        type="republish"
+        output="screen"
+        args=" raw in:=camera/image_raw out:=camera/image_trans"
+    />
+</launch>

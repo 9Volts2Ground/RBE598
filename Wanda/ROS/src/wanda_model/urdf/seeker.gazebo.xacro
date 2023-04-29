@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <transmission name="seeker/joint_states/azimuth_tran">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="seeker/joint_states/azimuth">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="seeker/neck/azimuth_servo">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <gazebo reference="seeker/neck">
+        <material>Gazebo/DarkGray</material>
+        <mu1>0.3</mu1>
+        <mu2>0.3</mu2>
+    </gazebo>
+
+    <transmission name="seeker/joint_states/elevation_tran">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="seeker/joint_states/elevation">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="seeker/neck/azimuth_servo">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <gazebo reference="seeker/seeker">
+        <material>Gazebo/Red</material>
+        <mu1>0.3</mu1>
+        <mu2>0.3</mu2>
+    </gazebo>
+
+    <!-- Include camera model -->
+    <xacro:include filename="camera.gazebo.xacro" />
+
+</robot>

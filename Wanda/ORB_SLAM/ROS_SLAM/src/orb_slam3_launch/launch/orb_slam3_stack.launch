@@ -1,0 +1,22 @@
+<launch>
+    <!-- Kick off sensors and actuators -->
+    <include file="$(find hardware_control)/launch/hardware.launch" />
+
+    <!-- Manages the range sensor server, publishes sensor data -->
+    <include file="$(find range_sensor_control)/launch/range_sensor_control.launch" />
+
+    <!-- Kick off gait trajectory and inverse kinematics for the robot to walk -->
+    <include file="$(find walking_gait)/launch/walking_gait.launch" />
+
+    <!-- Compute forward kinematic TF frame calculations -->
+    <include file="$(find fkine_calcs)/launch/body_fkine.launch" />
+
+    <!-- Processes game controller inputs to control the robot -->
+    <include file="$(find manual_control)/launch/manual_control.launch" />
+
+    <!-- Calculate localization for the robot's state -->
+    <include file="$(find robot_localization)/launch/ekf_wanda.launch" />
+
+    <!-- Kick off ORB_SLAM3 node -->
+    <include file="$(find orb_slam3_launch)/launch/wanda_mono.launch" />
+</launch>

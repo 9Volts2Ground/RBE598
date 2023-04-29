@@ -1,0 +1,17 @@
+<launch>
+    <!-- Bring in global hardware parameters -->
+    <rosparam command="load" file="$(find topic_messages)/params/topics.yaml" />
+
+    <node
+        pkg="walking_gait"
+        name="twist_uncertainty_calc_node"
+        type="twist_uncertainty_calc_node"
+        respawn="true"
+        respawn_delay="1"
+        output="screen"
+    >
+        <param name="uncert_x" value="1.0"/>
+        <param name="uncert_y" value="1.0"/>
+        <param name="uncert_z" value="1.0"/>
+    </node>
+</launch>

@@ -1,0 +1,26 @@
+<launch>
+
+    <rosparam file="$(find wanda_model)/config/wanda_control.yaml" command="load" />
+
+    <!-- Process the URDF model -->
+    <!-- <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"> -->
+        <!-- <remap from="/joint_states" to="/seeker/joint_states"/> -->
+    <!-- </node> -->
+
+    <node
+        name="controller_spawner"
+        pkg="controller_manager"
+        type="spawner"
+        respawn="false"
+        output="screen"
+        args="joint_state_controller
+              seeker/controller/azimuth seeker/controller/elevation
+              leg0/controller/hip leg0/controller/knee leg0/controller/ankle
+              leg1/controller/hip leg1/controller/knee leg1/controller/ankle
+              leg2/controller/hip leg2/controller/knee leg2/controller/ankle
+              leg3/controller/hip leg3/controller/knee leg3/controller/ankle
+              leg4/controller/hip leg4/controller/knee leg4/controller/ankle
+              leg5/controller/hip leg5/controller/knee leg5/controller/ankle
+              "
+    />
+</launch>

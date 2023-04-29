@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <!-- Include Gazebo-specific elements of the body -->
+    <xacro:include filename="body.gazebo.xacro" />
+
+    <!-- Body -->
+    <link name="body/body">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <material name="black"/>
+            <geometry>
+                <mesh filename="package://wanda_model/meshes/body.STL"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="package://wanda_model/meshes/body.STL"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <origin xyz="0.00231 0.00019 0.04858" rpy="0 0 0"/>
+            <mass value="${body_mass}"/>
+            <inertia
+                ixx="5.02e-3" ixy="1e-7" ixz="1.1e-4"
+                iyy="5.24e-3" iyz="2e-5"
+                izz="3.81e-3"
+            />
+        </inertial>
+    </link>
+
+    <!-- IMU hard-mounted to the body -->
+    <joint name="imu" type="fixed">
+        <parent link="body/body"/>
+        <child link="imu"/>
+        <origin xyz="0.04502 0.02 0.088951" rpy="0 0 0"/>
+    </joint>
+
+    <link name="imu">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+            <mass value="0.0001"/>
+            <inertia
+                ixx="1e-08" ixy="0" ixz="0"
+                iyy="1e-08" iyz="0"
+                izz="1e-08"
+            />
+        </inertial>
+    </link>
+
+</robot>

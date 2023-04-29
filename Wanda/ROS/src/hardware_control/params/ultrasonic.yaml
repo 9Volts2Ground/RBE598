@@ -1,0 +1,14 @@
+#=============================================
+# Ultrasonic Range Sensor Info
+#=============================================
+# Hardware pins on the Raspberry Pi that the sensor is connected to
+ultrasonic/transmit_pin: 27
+ultrasonic/receive_pin: 22
+
+# Maximum distance we can measure, meters
+ultrasonic/max_range: 4.0
+
+# Sometimes the sensor needs a bit of calibration
+# This value is added to the sensor range to account for
+# any calibration errors
+ultrasonic/calibration_offset: 0.022 # meters

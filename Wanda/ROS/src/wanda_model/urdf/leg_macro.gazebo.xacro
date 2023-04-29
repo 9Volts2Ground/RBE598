@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <xacro:macro name="leg_gazebo" params="num">
+
+        <gazebo reference="leg${num}/coxa">
+            <kp value="1000.0" />
+            <kd value="100.0" />
+            <material>Gazebo/DarkGray</material>
+        </gazebo>
+
+        <gazebo reference="leg${num}/femur">
+            <kp value="1000.0" />
+            <kd value="100.0" />
+            <material>Gazebo/DarkGray</material>
+        </gazebo>
+
+        <gazebo reference="leg${num}/tibia">
+            <mu1 value="500000.0"/>
+            <mu2 value="300000.0"/>
+            <kp value="1000.0" />
+            <kd value="100.0" />
+            <minDepth value="0.0005" />
+            <material>Gazebo/DarkGray</material>
+        </gazebo>
+
+        <transmission name="leg${num}/joint_states/hip_tran">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="leg${num}/joint_states/hip">
+                <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="leg${num}/joint_states/hip_servo">
+                <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+
+        <transmission name="leg${num}/joint_states/knee_tran">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="leg${num}/joint_states/knee">
+                <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="leg${num}/joint_states/knee_servo">
+                <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+
+        <transmission name="leg${num}/joint_states/ankle_tran">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="leg${num}/joint_states/ankle">
+                <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="leg${num}/joint_states/ankle_servo">
+                <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+
+    </xacro:macro>
+
+</robot>

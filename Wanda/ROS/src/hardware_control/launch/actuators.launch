@@ -1,0 +1,17 @@
+<launch>
+    <!-- Bring in global hardware parameters -->
+    <rosparam command="load" file="$(find system_globals)/params/hardware_constants.yaml" />
+    <rosparam command="load" file="$(find system_globals)/params/servos.yaml" />
+
+    <!-- Use Python tool to determine if we are running on hardware or not -->
+    <param name="IS_WANDA" command="$(find hardware_control)/scripts/is_wanda_init.py" />
+
+    <node
+        pkg="hardware_control"
+        name="move_motors_node"
+        type="move_motors_node.py"
+        respawn="true"
+        respawn_delay="1"
+        output="screen"
+    />
+</launch>

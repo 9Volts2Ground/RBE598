@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <!-- Rviz-specific colors -->
+    <material name="black">
+        <color rgba="0.2 0.2 0.2 1" />
+    </material>
+    <material name="red">
+        <color rgba="1 0 0 1" />
+    </material>
+
+</robot>

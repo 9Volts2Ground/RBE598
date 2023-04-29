@@ -1,0 +1,12 @@
+<launch>
+    <rosparam command="load" file="$(find system_globals)/params/hardware_constants.yaml" />
+    <rosparam command="load" file="$(find topic_messages)/params/topics.yaml" />
+
+    <!-- Load the visualizer GUI -->
+    <node 
+        name="joint_control_passthrough_node" 
+        pkg="wanda_model" 
+        type="joint_control_passthrough_node"
+        output="screen"
+    />
+</launch>

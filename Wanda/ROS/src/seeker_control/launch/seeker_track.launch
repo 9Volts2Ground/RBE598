@@ -1,0 +1,16 @@
+<launch>
+    <!-- Bring in global hardware parameters -->
+    <rosparam command="load" file="$(find system_globals)/params/frames.yaml" />
+    <rosparam command="load" file="$(find system_globals)/params/hardware_constants.yaml" />
+    <rosparam command="load" file="$(find topic_messages)/params/topics.yaml" />
+
+    <!-- Needed for seeker_saturate.py rate -->
+    <rosparam command="load" file="$(find system_globals)/params/servos.yaml" />
+
+    <node
+        pkg="seeker_control"
+        name="seeker_track_color_node"
+        type="seeker_track_color_node.py"
+        output="screen"
+    />
+</launch>

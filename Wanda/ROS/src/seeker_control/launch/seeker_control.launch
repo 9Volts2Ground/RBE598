@@ -1,0 +1,22 @@
+<launch>
+
+    <!-- Choose which type of controller to use -->
+    <!-- Acceptable options: track_color, manual, look_ahead -->
+    <arg name="controller" default="track_color" />
+
+    <!-- Run color tracking seeker controller -->
+    <group if="$(eval arg('controller') == 'track_color')">
+        <include file="$(find seeker_control)/launch/seeker_track.launch" />
+    </group>
+
+    <!-- Have the seeker look in the direction we want to walk -->
+    <group if="$(eval arg('controller') == 'look_ahead')">
+        <include file="$(find seeker_control)/launch/seeker_look_ahead.launch" />
+    </group>
+
+    <!-- Run manual seeker controller -->
+    <group if="$(eval arg('controller') == 'manual')">
+        <include file="$(find manual_control)/launch/manual_seeker_control.launch" />
+    </group>
+
+</launch>

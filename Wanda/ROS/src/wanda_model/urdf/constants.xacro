@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <!-- Leg link lengths -->
+    <xacro:property name="L1" value="0.033325"/>
+    <xacro:property name="L2" value="0.090"/>
+    <xacro:property name="L3" value="0.113"/>
+
+    <!-- Mass properties -->
+    <xacro:property name="body_mass"   value="0.8302"/>
+    <xacro:property name="L1_mass"     value="0.1528"/>
+    <xacro:property name="L2_mass"     value="0.0121"/>
+    <xacro:property name="L3_mass"     value="0.0778"/>
+    <xacro:property name="neck_mass"   value="0.0592"/>
+    <xacro:property name="seeker_mass" value="0.0699"/>
+
+    <!-- X and Y components to first joint, leg0 -->
+    <xacro:property name="sx0" value="0.076162"/>
+    <xacro:property name="sy0" value="0.055"/>
+
+    <!-- X and Y components to first joint, leg2 -->
+    <xacro:property name="sx2" value="0.0"/>
+    <xacro:property name="sy2" value="0.083376"/>
+
+    <!-- All servos are at the same height from the base -->
+    <xacro:property name="sz" value="0.04273"/>
+
+    <!-- Angle from fwd X to shoulder -->
+    <xacro:property name="alpha0" value="0.62543422"/>
+    <xacro:property name="alpha2" value="${pi/2}"/>
+    <xacro:property name="alpha4" value="2.51615843"/>
+
+</robot>

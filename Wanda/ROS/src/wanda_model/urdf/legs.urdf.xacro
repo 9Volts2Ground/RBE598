@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <!-- Macro to define any leg -->
+    <xacro:include filename="leg_macro.urdf.xacro" />
+
+    <!-- Call the macro for the left legs -->
+    <xacro:leg num="0" sx="${sx0}"  sy="${sy0}"  sz="${sz}" alpha="${alpha0}"  leg_flip="-1" femur_roll="${pi}" side="left"/>
+    <xacro:leg num="2" sx="${sx2}"  sy="${sy2}"  sz="${sz}" alpha="${alpha2}"  leg_flip="-1" femur_roll="${pi}" side="left"/>
+    <xacro:leg num="4" sx="${-sx0}" sy="${sy0}"  sz="${sz}" alpha="${alpha4}"  leg_flip="-1" femur_roll="${pi}" side="left"/>
+
+    <!-- Call the macro for the left legs -->
+    <xacro:leg num="1" sx="${sx0}"  sy="${-sy0}" sz="${sz}" alpha="${-alpha0}" leg_flip="1"  femur_roll="0" side="right"/>
+    <xacro:leg num="3" sx="${sx2}"  sy="${-sy2}" sz="${sz}" alpha="${-alpha2}" leg_flip="1"  femur_roll="0" side="right"/>
+    <xacro:leg num="5" sx="${-sx0}" sy="${-sy0}" sz="${sz}" alpha="${-alpha4}" leg_flip="1"  femur_roll="0" side="right"/>
+
+</robot>

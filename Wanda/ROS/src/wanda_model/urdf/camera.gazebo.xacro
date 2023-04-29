@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <!-- Add optical link with proper orientation -->
+    <joint name="seeker/camera_optical_joint" type="fixed">
+        <parent link="seeker/camera"/>
+        <child link="seeker/camera_optical"/>
+        <origin xyz="0 0 0" rpy="0 ${-pi/2} ${pi/2}"/>
+    </joint>
+
+    <link name="seeker/camera_optical">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+            <mass value="0.0001"/>
+            <inertia
+                ixx="1e-08" ixy="0" ixz="0"
+                iyy="1e-08" iyz="0"
+                izz="1e-08"
+            />
+        </inertial>
+    </link>
+
+    <!-- camera -->
+    <gazebo reference="seeker/camera_optical">
+        <sensor type="camera" name="camera">
+            <update_rate>10.0</update_rate>
+            <camera name="camera">
+                <horizontal_fov>1.3962634</horizontal_fov>
+                <image>
+                    <width>640</width>
+                    <height>480</height>
+                    <format>B8G8R8</format>
+                </image>
+                <clip>
+                    <near>0.02</near>
+                    <far>300</far>
+                </clip>
+                <noise>
+                    <type>gaussian</type>
+                    <!-- Noise is sampled independently per pixel on each frame.
+                        That pixel's noise value is added to each of its color
+                        channels, which at that point lie in the range [0,1]. -->
+                    <mean>0.0</mean>
+                    <stddev>0.007</stddev>
+                </noise>
+            </camera>
+            <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+                <alwaysOn>true</alwaysOn>
+                <updateRate>0.0</updateRate>
+                <cameraName>camera</cameraName>
+                <imageTopicName>image_raw</imageTopicName>
+                <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+                <frameName>seeker/camera</frameName>
+                <hackBaseline>0.07</hackBaseline>
+                <distortionK1>-0.495176</distortionK1>
+                <distortionK2>0.471928</distortionK2>
+                <distortionK3>0.004848</distortionK3>
+                <distortionT1>0.007848</distortionT1>
+                <distortionT2>0.0</distortionT2>
+            </plugin>
+        </sensor>
+    </gazebo>
+
+</robot>

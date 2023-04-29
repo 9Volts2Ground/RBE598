@@ -1,0 +1,19 @@
+<launch>
+    <!-- Bring in global hardware parameters -->
+    <rosparam command="load" file="$(find system_globals)/params/frames.yaml" />
+    <rosparam command="load" file="$(find system_globals)/params/hardware_constants.yaml" />
+    <rosparam command="load" file="$(find topic_messages)/params/topics.yaml" />
+    <rosparam command="load" file="$(find hardware_control)/params/imu.yaml" />
+
+    <!-- Use Python tool to determine if we are running on hardware or not -->
+    <param name="IS_WANDA" command="$(find hardware_control)/scripts/is_wanda_init.py" />
+
+    <node
+        pkg="hardware_control"
+        name="imu_node"
+        type="imu_node.py"
+        respawn="true"
+        respawn_delay="1"
+        output="screen"
+    />
+</launch>

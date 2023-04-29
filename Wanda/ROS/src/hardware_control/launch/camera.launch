@@ -1,0 +1,51 @@
+<launch>
+    <rosparam command="load" file="$(find system_globals)/params/frames.yaml" />
+    <rosparam command="load" file="$(find system_globals)/params/hardware_constants.yaml" />
+    <rosparam command="load" file="$(find topic_messages)/params/topics.yaml" />
+
+    <!-- Use Python tool to determine if we are running on hardware or not -->
+    <param name="IS_WANDA" command="$(find hardware_control)/scripts/is_wanda_init.py" />
+
+    <!-- ToDo: use IS_WANDA to choose which camera params to use -->
+    <!-- <rosparam command="load" ns="/camera" file="$(find hardware_control)/params/camera_wanda.yaml" /> -->
+    <rosparam command="load" ns="/camera" file="$(find hardware_control)/params/camera_degobuntu.yaml" />
+    <!-- <rosparam command="load" ns="/camera" file="$(find hardware_control)/params/camera_nabuntu.yaml" /> -->
+    <!-- <rosparam command="load" ns="/camera" file="$(find hardware_control)/params/camera_chromino.yaml" /> -->
+
+    <node
+        pkg="hardware_control"
+        name="camera_image_node"
+        type="camera_image_node"
+        respawn="true"
+        respawn_delay="1"
+        output="screen"
+    >
+        <!-- Optional: if multiple cameras are available, which one to use. Default 0 -->
+        <param name="camera_source" type="int"    value="0"/>
+
+        <!-- Optional: the namespace to output topics to. Default is "camera" -->
+        <param name="namespace" type="string" value="camera"/>
+
+        <!-- Optional: Name of topic to publish. Default is image_raw (under the namespace)-->
+        <!-- <param name="image_topic" type="string" value="image_raw"/> -->
+
+        <!-- Optional: which TF frame the camera lives in. Default "camera" -->
+        <param name="camera_frame" type="string" value="seeker/camera"/>
+
+        <!-- Optional: output video framerate. Default 10Hz -->
+        <param name="frame_rate"    type="int"    value="10"/>
+
+        <!-- Optional: If we want to rotate the image, set this flag. The image will flip if the IS_WANDA hardware flag is true as well. Default false -->
+        <!-- <param name="rotate_image"  type="bool"   value="false"/> -->
+
+        <!-- Optional: publish camera info at the same time as video feed -->
+        <param name="publish_camera_info" type="bool" value="true"/>
+
+        <!-- Optional: the namespace that cameraInfo parameters to read in are under. Default "camera" -->
+        <param name="camera_info_namespace" type="string" value="camera"/>
+
+        <!-- Optional: the topic name to publish camera info to, under the given namespace. Default "camera_info" -->
+        <!-- <param name="camera_info_topic" type="string" value="camera_info"/> -->
+    </node>
+
+</launch>

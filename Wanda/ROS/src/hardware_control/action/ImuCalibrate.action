@@ -1,0 +1,9 @@
+# Define the goal
+bool calibrate_imu
+float32 calibration_duration
+---
+# Define the result
+bool calibration_initiated
+---
+# Define the feedback info
+# Don't bother sending anything back for now

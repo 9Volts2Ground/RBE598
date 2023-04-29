@@ -1,0 +1,14 @@
+<launch>
+    <!-- Bring in global hardware parameters -->
+    <rosparam command="load" file="$(find system_globals)/params/frames.yaml" />
+    <rosparam command="load" file="$(find topic_messages)/params/topics.yaml" />
+
+    <node
+        pkg="navigation_stack"
+        name="twist_conversion_node"
+        type="twist_conversion_node"
+        respawn="true"
+        respawn_delay="1"
+        output="screen"
+    />
+</launch>

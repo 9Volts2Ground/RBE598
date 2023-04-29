@@ -1,0 +1,46 @@
+<launch>
+    <!-- Kick off image_transport to pipe data between the camera and SLAM -->
+    <!-- <include file="$(find orb_slam3_ros_wrapper)/launch/image_transport.launch" /> -->
+
+    <!-- Kick off the slam node -->
+    <node
+        name="orb_slam3_mono"
+        pkg="orb_slam3_ros_wrapper"
+        type="orb_slam3_ros_wrapper_mono"
+        output="screen"
+    >
+        <!-- Name of camera data topic to subscribe to -->
+        <!-- <remap from="/camera/image_raw" to="/camera/image_trans"/> -->
+
+        <!-- Parameters for original ORB-SLAM3 -->
+        <param name="voc_file"      type="string"   value="$(find orb_slam3_ros_wrapper)/config/ORBvoc.txt" />
+        <param name="settings_file" type="string"   value="$(find orb_slam3_ros_wrapper)/config/wanda.yaml" />
+
+        <!-- Parameters for ROS -->
+        <param name="world_frame_id"    type="string"   value="odom" />
+        <param name="cam_frame_id"      type="string"   value="camera" />
+        <param name="publish_tf"        type="bool"     value="false" />
+    </node>
+
+    <!-- Visualization - RViz-->
+    <node
+        name="rviz"
+        pkg="rviz"
+        type="rviz"
+        args="-d $(find orb_slam3_ros_wrapper)/config/orb_slam3_no_imu.rviz"
+        output="screen"
+    />
+
+    <node
+        pkg="hector_trajectory_server"
+        type="hector_trajectory_server"
+        name="trajectory_server_orb_slam3"
+        output="screen"
+        ns="orb_slam3_ros"
+    >
+        <param name="/target_frame_name" value="odom" />
+        <param name="/source_frame_name" value="camera" />
+        <param name="/trajectory_update_rate" value="20.0" />
+        <param name="/trajectory_publish_rate" value="20.0" />
+    </node>
+</launch>

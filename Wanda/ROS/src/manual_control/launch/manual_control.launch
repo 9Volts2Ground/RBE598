@@ -1,0 +1,30 @@
+<launch>
+    <!-- Allow users to set the system joystick number -->
+    <arg name="js_num" default="0"/>
+
+    <!-- Grabs inputs from a game controller -->
+    <include file="$(find manual_control)/launch/joy.launch">
+        <arg name="js_num" value="$(arg js_num)" />
+    </include>
+
+    <!-- Command the IMU to calibrate itself -->
+    <include file="$(find manual_control)/launch/manual_imu_calibrate.launch" />
+
+    <!-- Increment where the feet center around during the walking gait -->
+    <include file="$(find manual_control)/launch/manual_increment_foot_center.launch" />
+
+    <!-- Update body pose from controller input -->
+    <include file="$(find manual_control)/launch/manual_pose_control.launch" />
+
+    <!-- Disable/enable range sensor from controller input -->
+    <include file="$(find manual_control)/launch/manual_range_control.launch" />
+
+    <!-- Update seeker pose from controller input -->
+    <include file="$(find seeker_control)/launch/seeker_control_stack.launch" >
+        <arg name="controller" value="manual" />
+        <arg name="dither" value="false" />
+    </include>
+
+    <!-- Update seeker pose from controller input -->
+    <include file="$(find manual_control)/launch/manual_walk_twist_control.launch" />
+</launch>

@@ -1,0 +1,18 @@
+<launch>
+    <!-- Turn everything on by default, but let users turn stuff off if desired -->
+    <arg name="camera"      default="true" />
+    <arg name="ultrasonic"  default="true" />
+    <arg name="imu"         default="true" />
+    <arg name="temperature" default="true" />
+
+    <!-- Kick off system actuator nodes -->
+    <include file="$(find hardware_control)/launch/actuators.launch" />
+
+    <!-- Kick off system sensor nodes -->
+    <include file="$(find hardware_control)/launch/sensors.launch">
+        <arg name="camera"      default="$(arg camera)" />
+        <arg name="ultrasonic"  default="$(arg ultrasonic)" />
+        <arg name="imu"         default="$(arg imu)" />
+        <arg name="temperature" default="$(arg temperature)" />
+    </include>
+</launch>

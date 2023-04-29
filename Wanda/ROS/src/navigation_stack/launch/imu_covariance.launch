@@ -1,0 +1,13 @@
+<launch>
+    <!-- Bring in global hardware parameters -->
+    <rosparam command="load" file="$(find topic_messages)/params/topics.yaml" />
+
+    <node
+        pkg="navigation_stack"
+        name="imu_orientation_covariance_node"
+        type="imu_orientation_covariance_node"
+        respawn="true"
+        respawn_delay="1"
+        output="screen"
+    />
+</launch>

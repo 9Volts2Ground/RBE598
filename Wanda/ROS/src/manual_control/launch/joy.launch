@@ -1,0 +1,28 @@
+<launch>
+    <!-- Allow users to set the system joystick number -->
+    <arg name="js_num" default="0"/>
+
+    <!-- Open source ROS node, accepts game controller commands -->
+    <node
+        pkg="joy"
+        name="joy_node"
+        type="joy_node"
+        output="screen"
+    >
+        <!-- Manually update which controller to receive -->
+        <param
+            name="dev"
+            value="/dev/input/js$(arg js_num)"
+        />
+        <!-- How often we send info to a topic if you don't move the controller, in Hz -->
+        <param
+            name="autorepeat_rate"
+            value="30.0"
+        />
+        <!-- This flag initializes the triggers to 1, for a full range of -1:1 -->
+        <param
+            name="default_trig_val"
+            value="true"
+        />
+    </node>
+</launch>

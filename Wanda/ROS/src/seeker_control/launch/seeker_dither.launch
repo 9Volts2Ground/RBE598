@@ -1,0 +1,23 @@
+<launch>
+    <!-- Bring in global hardware parameters -->
+    <rosparam command="load" file="$(find system_globals)/params/frames.yaml" />
+    <rosparam command="load" file="$(find system_globals)/params/hardware_constants.yaml" />
+    <rosparam command="load" file="$(find topic_messages)/params/topics.yaml" />
+
+    <!-- Needed for seeker_saturate.py rate -->
+    <rosparam command="load" file="$(find system_globals)/params/servos.yaml" />
+
+    <!-- Allow users to change the topics to subscribe and publish -->
+    <arg name="topic_in" default="seeker/nominal"/>
+    <arg name="topic_out" default="seeker/search"/>
+
+    <node
+        pkg="seeker_control"
+        name="seeker_dither_node"
+        type="seeker_dither_node.py"
+        output="screen"
+    >
+        <param name="topic_in" value="$(arg topic_in)" />
+        <param name="topic_out" value="$(arg topic_out)" />
+    </node>
+</launch>

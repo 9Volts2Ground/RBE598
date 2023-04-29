@@ -1,0 +1,7 @@
+<launch>
+    <!-- Process camera data to track a target -->
+    <include file="$(find track_color)/launch/track_color_image_processing.launch" />
+
+    <!-- Controls the desired walking gait velocity -->
+    <include file="$(find track_color)/launch/walk_control.launch" />
+</launch>

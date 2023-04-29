@@ -1,0 +1,10 @@
+<launch>
+    <rosparam command="load" file="$(find topic_messages)/params/topics.yaml" />
+
+    <node
+        pkg="track_color"
+        name="track_color_image_processing"
+        type="track_color_image_processing.py"
+        output="screen"
+    />
+</launch>

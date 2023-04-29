@@ -1,0 +1,53 @@
+<launch>
+    <!-- ================================================================= -->
+    <!-- Decide if we should use simulation time in Gazebo -->
+    <arg name="use_sim_time" default="false" />
+    <param name="use_sim_time" value="$(arg use_sim_time)" />
+
+    <!-- Decide if we want to turn on the hardware or not -->
+    <arg name="hardware_enable" default="true" />
+
+    <!-- ================================================================= -->
+    <group if="$(arg hardware_enable)">
+        <!-- Kick off sensors and actuators -->
+        <include file="$(find hardware_control)/launch/hardware.launch" />
+    </group>
+
+    <!-- Manages the range sensor server, publishes sensor data -->
+    <include file="$(find range_sensor_control)/launch/range_sensor_system.launch" >
+        <arg name="init_state" value="true" />
+    </include>
+
+    <!-- Kick off gait trajectory and inverse kinematics for the robot to walk -->
+    <include file="$(find walking_gait)/launch/walking_gait.launch" />
+
+    <!-- Send out states for the seeker -->
+    <include file="$(find seeker_control)/launch/seeker_control_stack.launch" >
+        <arg name="controller" value="look_ahead" />
+        <arg name="dither" value="true" />
+    </include>
+
+    <!-- Compute forward kinematic TF frame calculations -->
+    <include file="$(find fkine_calcs)/launch/fkine_stack.launch" />
+
+    <!-- Run the body pose filter/control management stack -->
+    <include file="$(find body_pose_control)/launch/body_pose_control_stack.launch">
+        <arg name="use_pose_controller" value="true" />
+    </include>
+
+    <!-- Allow users to manually manipulate the body pose -->
+    <arg name="js_num" default="0"/>
+    <include file="$(find manual_control)/launch/joy.launch">
+        <arg name="js_num" value="$(arg js_num)"/>
+    </include>
+    <include file="$(find manual_control)/launch/manual_pose_control.launch"/>
+
+    <!-- Allow users to manually calibrate the IMU -->
+    <arg name="imu_cal" default="false"/>
+    <group if="$(arg imu_cal)">
+        <include file="$(find manual_control)/launch/manual_imu_calibrate.launch" />
+    </group>
+
+    <!-- Perform navigation -->
+    <include file="$(find navigation_stack)/launch/navigation.launch" />
+</launch>

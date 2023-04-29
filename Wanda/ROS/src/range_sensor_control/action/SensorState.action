@@ -1,0 +1,11 @@
+# Define the goal
+bool ACTIVE=True
+bool INACTIVE=False
+
+bool state
+---
+# Define the result
+bool state_set
+---
+# Define the feedback info
+# Don't bother sending anything back for now

@@ -1,0 +1,31 @@
+# General robot geometry parameters
+num_legs: 6
+num_joints: 3 # Number of joints in each leg
+num_seeker_joints: 2
+
+# Leg link lengths, meters
+L1: 0.033325   # Coxa
+L2: 0.090     # Femur
+L3: 0.113     # Tibia
+
+# Length from seeker el joint to camera lens
+neck_height: 0.13858 # m, Z translation from base to seeker el axle
+
+# Define intermediate frames on seeker gimbal
+body2neck_az: [0.083076, 0.0, 0.08995]
+neck_az2el: [0.0104, 0.0, 0.04121]
+
+seeker_cam_offset: [0.04782058, 0.0167005, 0.0] # m, X,Y,Z translation from seeker el axis to camera lens
+seeker_ultra_offset: [0.04, -0.0065, 0.0] # m, X,Y,Z translation from seeker el axis to ultrasonic range sensor
+
+imu_pos: [0.04502, 0.02, 0.088951] #m, X,Y,Z translation from origin to IMU
+
+# S is the vector from the robot body base frame
+# to each shoulder joint
+s_vec: [0.076162, 0.076162,      0.0,       0.0, -0.076162, -0.076162,
+           0.055,   -0.055, 0.083376, -0.083376,     0.055,    -0.055,
+         0.04273,  0.04273,  0.04273,   0.04273,   0.04273,    0.04273]
+
+# Angle around body Z axis from body X axis to s_vec, for each leg
+# Calculated as np.arctan2( s_vec[1,:], s_vec[0,:])
+alpha_offset: [0.62543422, -0.62543422,  1.57079633, -1.57079633,  2.51615843, -2.51615843]

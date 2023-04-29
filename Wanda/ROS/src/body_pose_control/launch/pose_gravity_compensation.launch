@@ -1,0 +1,20 @@
+<launch>
+    <!-- Bring in global hardware parameters -->
+    <rosparam command="load" file="$(find system_globals)/params/frames.yaml" />
+    <rosparam command="load" file="$(find system_globals)/params/hardware_constants.yaml" />
+    <rosparam command="load" file="$(find topic_messages)/params/topics.yaml" />
+    <rosparam command="load" file="$(find walking_gait)/params/gait_state.yaml" />
+
+    <node
+        pkg="body_pose_control"
+        name="pose_gravity_compensation_node"
+        type="pose_gravity_compensation_node.py"
+        output="screen"
+    >
+        <param name="frame_in" value="body/commanded"/>
+        <param name="frame_out" value="body/gravity_adjust"/>
+        <param name="Kp" value="1.0"/>
+        <param name="Ki" value="0.02"/>
+        <param name="Kd" value="0.02"/>
+    </node>
+</launch>

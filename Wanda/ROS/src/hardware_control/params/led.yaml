@@ -1,0 +1,5 @@
+#=============================================
+# LED Info
+#=============================================
+led/leg2led: [6, 0, 5, 1, 4, 2] # Mapping between leg index and LED index
+led/seeker: 3 # LED array number for the seeker

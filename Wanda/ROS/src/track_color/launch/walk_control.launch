@@ -1,0 +1,13 @@
+<launch>
+    <!-- Bring in global hardware parameters -->
+    <rosparam command="load" file="$(find system_globals)/params/frames.yaml" />
+    <rosparam command="load" file="$(find system_globals)/params/hardware_constants.yaml" />
+    <rosparam command="load" file="$(find topic_messages)/params/topics.yaml" />
+
+    <node
+        pkg="track_color"
+        name="walk_control_node"
+        type="walk_control_node.py"
+        output="screen"
+    />
+</launch>

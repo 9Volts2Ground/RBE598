@@ -1,0 +1,16 @@
+<launch>
+    <!-- Bring in global hardware parameters -->
+    <rosparam command="load" file="$(find topic_messages)/params/topics.yaml" />
+
+    <node
+        pkg="walking_gait"
+        name="twist_lowpass_filter_node"
+        type="twist_lowpass_filter_node"
+        respawn="true"
+        respawn_delay="1"
+        output="screen"
+    >
+        <param name="topic_in"  value="walking_twist/commanded" />
+        <param name="topic_out" value="walking_twist/filtered" />
+    </node>
+</launch>

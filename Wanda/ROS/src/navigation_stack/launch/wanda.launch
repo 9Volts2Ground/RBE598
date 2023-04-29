@@ -1,0 +1,10 @@
+<launch>
+    <!-- Load in the URDF model -->
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find wanda_model)/urdf/wanda.urdf.xacro'"/>
+
+    <!-- Process the URDF model -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+    <!-- Load the visualizer GUI -->
+    <node name="rviz" pkg="rviz" type="rviz" args=" -d $(find navigation_stack)/rviz/wanda.rviz"/>
+</launch>

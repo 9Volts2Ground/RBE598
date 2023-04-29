@@ -1,0 +1,21 @@
+# obstacle_range: 4.0
+obstacle_range: 1.0
+raytrace_range: 4.0
+
+# Footprint of the robot, meters
+robot_radius: 0.28
+
+# # How far away an obstacle is from the path before it begins incurring a cost
+# inflation_radius: 0.28
+
+# List of obstacle-sensing data to use
+observation_sources: point_cloud_sensor
+
+# Info about our point cloud
+point_cloud_sensor: {
+    sensor_frame: seeker/ultrasonic,
+    data_type: PointCloud2,
+    topic: range/filtered,
+    marking: true,
+    clearing: true
+    }

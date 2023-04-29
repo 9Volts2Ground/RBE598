@@ -1,0 +1,18 @@
+# Path to the image file containing the occupancy data
+image: map.jpg
+
+# Resolution of the map, meters / pixel
+# resolution: 0.008994
+resolution: 0.0095
+
+# The 2-D pose of the lower-left pixel in the map, as (x, y, yaw)
+origin: [-14.2, -4.6, 0.0]
+
+# Pixels with occupancy probability greater than this threshold are considered completely occupied.
+occupied_thresh: 0.65
+
+# Pixels with occupancy probability less than this threshold are considered completely free.
+free_thresh: 0.196
+
+# Whether the white/black free/occupied semantics should be reversed
+negate: 0

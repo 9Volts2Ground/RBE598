@@ -1,0 +1,134 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <xacro:macro name="leg" params="num sx sy sz alpha leg_flip femur_roll side">
+
+        <joint name="leg${num}/shoulder_fixed" type="fixed">
+            <parent link="body/body"/>
+            <child link="leg${num}/shoulder"/>
+            <origin xyz="${sx} ${sy} ${sz}" rpy="0 0 ${alpha}"/>
+        </joint>
+
+        <!-- Shoulder Position -->
+        <link name="leg${num}/shoulder">
+            <inertial>
+                <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+                <mass value="0.0001"/>
+                <inertia
+                    ixx="1e-08" ixy="0" ixz="0"
+                    iyy="1e-08" iyz="0"
+                    izz="1e-08"
+                />
+            </inertial>
+        </link>
+
+        <joint name="leg${num}/joint_states/hip" type="revolute">
+            <parent link="leg${num}/shoulder"/>
+            <child link="leg${num}/coxa"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <axis xyz="0 0 1"/>
+            <limit effort="10.08" lower="-0.87266463" upper="0.95993109" velocity="${2*pi}"/>
+            <dynamics damping="1.0" friction="1.0"/>
+        </joint>
+
+        <!-- First leg links -->
+        <link name="leg${num}/coxa">
+            <visual>
+                <origin rpy="0 0 0" xyz="0 0 0"/>
+                <material name="black" />
+                <geometry>
+                    <mesh filename="package://wanda_model/meshes/link_1_${side}.STL"/>
+                </geometry>
+            </visual>
+            <collision>
+                <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://wanda_model/meshes/link_1_${side}.STL"/>
+                </geometry>
+            </collision>
+            <inertial>
+                <origin xyz="0.01738 ${leg_flip*0.00707} 0.01112" rpy="0 0 0"/>
+                <mass value="${L1_mass}"/>
+                <inertia
+                    ixx="1.1e-4" ixy="-2.0e-5" ixz="3e-5"
+                    iyy="1.9e-4" iyz="-2.0e-5"
+                    izz="1.5e-4"
+                />
+            </inertial>
+        </link>
+
+        <joint name="leg${num}/joint_states/knee" type="revolute">
+            <parent link="leg${num}/coxa"/>
+            <child link="leg${num}/femur"/>
+            <origin xyz="${L1} 0 0" rpy="${pi/2} 0 0"/>
+            <axis xyz="0 0 1"/>
+            <limit effort="10.08" lower="${-pi/2}" upper="${pi/2}" velocity="${2*pi}"/>
+            <dynamics damping="1.0" friction="1.0"/>
+        </joint>
+
+        <!-- Second leg link -->
+        <link name="leg${num}/femur">
+            <visual>
+                <origin xyz="0 0 0" rpy="${femur_roll} 0 0"/>
+                <material name="black" />
+                <geometry>
+                    <mesh filename="package://wanda_model/meshes/link_2.STL"/>
+                </geometry>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="${femur_roll} 0 0"/>
+                <geometry>
+                    <mesh filename="package://wanda_model/meshes/link_2.STL"/>
+                </geometry>
+            </collision>
+            <inertial>
+                <origin xyz="0.04502 0.0 ${leg_flip*0.01623}" rpy="0 0 0"/>
+                <mass value="${L2_mass}"/>
+                <inertia
+                    ixx="3e-5" ixy="1e-7" ixz="1e-5"
+                    iyy="3e-5" iyz="1e-7"
+                    izz="3e-5"
+                />
+            </inertial>
+        </link>
+
+        <joint name="leg${num}/joint_states/ankle" type="revolute">
+            <parent link="leg${num}/femur"/>
+            <child link="leg${num}/tibia"/>
+            <origin xyz="${L2} 0 0" rpy="${pi} 0 0"/>
+            <axis xyz="0 0 1"/>
+            <limit effort="10.08" lower="-0.34906585" upper="2.7925268" velocity="${2*pi}"/>
+            <dynamics damping="1.0" friction="1.0"/>
+        </joint>
+
+        <!-- Third leg link -->
+        <link name="leg${num}/tibia">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <material name="black" />
+                <geometry>
+                    <mesh filename="package://wanda_model/meshes/link_3_${side}.STL"/>
+                </geometry>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://wanda_model/meshes/link_3_${side}.STL"/>
+                </geometry>
+            </collision>
+            <inertial>
+                <origin xyz="0.01434 0.0 ${leg_flip*0.01097}" rpy="0 0 0"/>
+                <mass value="${L3_mass}"/>
+                <inertia
+                    ixx="2e-5" ixy="1e-7" ixz="1e-5"
+                    iyy="7e-5" iyz="1e-7"
+                    izz="5e-5"
+                />
+            </inertial>
+        </link>
+
+        <!-- Adds Gazebo-specific things for this leg -->
+        <xacro:include filename="leg_macro.gazebo.xacro" />
+        <xacro:leg_gazebo num="${num}" />
+    </xacro:macro>
+</robot>

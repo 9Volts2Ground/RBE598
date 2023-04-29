@@ -1,0 +1,37 @@
+<launch>
+    <!-- Allow users to control which joystick to use -->
+    <arg name="js_num" default="0"/>
+
+    <!-- Make sure we are using the sim time -->
+    <param name="use_sim_time" value="true"/>
+
+    <!-- Load in the URDF model -->
+    <param
+        name="robot_description"
+        command="$(find xacro)/xacro '$(find wanda_model)/urdf/wanda.urdf.xacro'"
+    />
+
+    <!-- Kick off the sim -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch"/>
+
+    <!-- Turn on the robot state controller -->
+    <include file="$(find wanda_model)/launch/control.launch"/>
+
+    <!-- Convert desired joint angles into controller commands -->
+    <include file="$(find wanda_model)/launch/joint_control_passthrough.launch"/>
+
+    <!-- Manually control the robot -->
+    <include file="$(find manual_control)/launch/manual_control_stack.launch">
+        <arg name="hardware_enable" value="false"/>
+        <arg name="js_num" value="$(arg js_num)" />
+    </include>
+
+    <!-- Load the robot model into the sim-->
+    <node
+        name="spawn_model"
+        pkg="gazebo_ros"
+        type="spawn_model"
+        output="screen"
+        args="-param robot_description -urdf -model wanda"
+    />
+</launch>

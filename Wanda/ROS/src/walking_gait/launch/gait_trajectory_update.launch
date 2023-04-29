@@ -1,0 +1,20 @@
+<launch>
+    <!-- Bring in global hardware parameters -->
+    <rosparam command="load" file="$(find system_globals)/params/frames.yaml" />
+    <rosparam command="load" file="$(find system_globals)/params/hardware_constants.yaml" />
+    <rosparam command="load" file="$(find topic_messages)/params/topics.yaml" />
+
+    <!-- Can control which topic to subscribe to -->
+    <arg name="topic" default="walking_twist/filtered" />
+
+    <node
+        pkg="walking_gait"
+        name="gait_trajectory_update_node"
+        type="gait_trajectory_update_node.py"
+        respawn="true"
+        respawn_delay="1"
+        output="screen"
+    >
+        <param name="topic" value="$(arg topic)" />
+    </node>
+</launch>

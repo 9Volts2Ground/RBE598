@@ -1,0 +1,79 @@
+
+topics:
+    #============================================
+    # Kinematic topics
+    #============================================
+    # Leg-related topics
+    leg:
+        header: "leg"
+        foot_states: "foot_states"
+        joint_states: "joint_states"
+
+    # Seeker topics
+    seeker:
+        header: "seeker"
+        nominal: "nominal"
+        search: "search"
+        filtered: "filtered"
+
+    # Body pose topics
+    body_pose:
+        header: "body_pose"
+        commanded: "commanded"
+        gravity_adjust: "gravity_adjust"
+        filtered: "filtered"
+
+    # Walking velocity twist vectors
+    walking_twist:
+        header: "walking_twist"
+        commanded: "commanded"
+        filtered: "filtered"
+        uncertainty: "uncertainty"
+
+    # Walking gait states
+    gait_state:
+        header: "gait_state"
+        gait_state: "gait_state"
+
+    #============================================
+    # Sensor topics
+    #============================================
+    # Camera topics
+    camera:
+        header: "camera"
+        camera_info: "camera_info"
+        image_raw: "image_raw"
+        target_track: "target_track"
+
+    # IMU topics
+    imu:
+        header: "imu"
+        data_raw: "data_raw"
+        data_filtered: "data_filtered"
+        orientation_cov: "orientation_cov"
+
+    range:
+        header: "range"
+        data_raw: "data_raw"
+        point_cloud: "point_cloud"
+        filtered: "filtered"
+
+    temperature:
+        header: "temperature"
+        cpu: "cpu"
+
+    #============================================
+    # Odometry topics
+    #============================================
+    odometry:
+        header: "odometry"
+        ekf: "ekf"
+
+    #============================================
+    # Target Track topics
+    #============================================
+    target_track:
+        header: "target_track"
+        image_states: "image_states"
+        track_mode: "track_mode"
+

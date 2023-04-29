@@ -1,0 +1,15 @@
+#!/usr/bin/python3
+import os
+import shutil
+
+ros_dir = os.path.dirname(os.path.realpath(__file__))
+
+build_dir = os.path.join( ros_dir, "build" )
+if os.path.exists( build_dir ):
+    print("Removing /build directory:", build_dir)
+    shutil.rmtree( build_dir )
+    
+devel_dir = os.path.join( ros_dir, "devel" )
+if os.path.exists( devel_dir ):
+    print("Removing /devel dir:", devel_dir)
+    shutil.rmtree( devel_dir )

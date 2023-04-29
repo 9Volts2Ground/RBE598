@@ -1,0 +1,17 @@
+<launch>
+    <!-- Bring in global hardware parameters -->
+    <rosparam command="load" file="$(find system_globals)/params/frames.yaml" />
+    <rosparam command="load" file="$(find system_globals)/params/hardware_constants.yaml" />
+    <rosparam command="load" file="$(find topic_messages)/params/topics.yaml" />
+    <rosparam command="load" file="$(find walking_gait)/params/gait_state.yaml" />
+
+    <node
+        pkg="body_pose_control"
+        name="pose_filter_node"
+        type="pose_filter_node.py"
+        output="screen"
+    >
+        <param name="frame_in" value="body/gravity_adjust"/>
+        <param name="frame_out" value="body/body"/>
+    </node>
+</launch>

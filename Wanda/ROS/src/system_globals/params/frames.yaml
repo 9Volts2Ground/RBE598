@@ -1,0 +1,58 @@
+# These robot body coordinate frames are processed as a Python class
+# in frames.py, and as a C++ class in frames.h. Make sure that any changes
+# here are reflected in those files
+
+frames/body/body: "body/body"
+# Intermediate body frames
+frames/body/commanded: "body/commanded"
+frames/body/filtered: "body/filtered"
+frames/body/gravity_adjust: "body/gravity_adjust"
+
+frames/imu: "imu"
+
+# Seeker tree
+frames/seeker/neck_static: "seeker/neck_static"
+frames/seeker/neck: "seeker/neck"
+frames/seeker/seeker: "seeker/seeker"
+frames/seeker/camera: "seeker/camera"
+frames/seeker/ultrasonic: "seeker/ultrasonic"
+
+#================================================
+# Leg frames
+#================================================
+# Shouder is static relative to the body
+frames/legs/shoulder: ["leg0/shoulder", "leg1/shoulder", "leg2/shoulder",
+                       "leg3/shoulder", "leg4/shoulder", "leg5/shoulder"]
+
+# Hip is the joint axis after revolution
+frames/legs/hip: ["leg0/hip", "leg1/hip", "leg2/hip",
+                  "leg3/hip", "leg4/hip", "leg5/hip"]
+
+# Coxa is the first link of the legs
+frames/legs/coxa: ["leg0/coxa", "leg1/coxa", "leg2/coxa",
+                   "leg3/coxa", "leg4/coxa", "leg5/coxa"]
+
+# Knee joint connects the coxa and femur
+frames/legs/knee: ["leg0/knee", "leg1/knee", "leg2/knee",
+                   "leg3/knee", "leg4/knee", "leg5/knee"]
+
+# Femur is the second link of the legs
+frames/legs/femur: ["leg0/femur", "leg1/femur", "leg2/femur",
+                    "leg3/femur", "leg4/femur", "leg5/femur"]
+
+# Ankle connects the femur and tibia
+frames/legs/ankle: ["leg0/ankle", "leg1/ankle", "leg2/ankle",
+                    "leg3/ankle", "leg4/ankle", "leg5/ankle"]
+
+# Tibia is the third link of the legs
+frames/legs/tibia: ["leg0/tibia", "leg1/tibia", "leg2/tibia",
+                    "leg3/tibia", "leg4/tibia", "leg5/tibia"]
+
+# Foot is the tip of the tibia
+frames/legs/foot: ["leg0/foot", "leg1/foot", "leg2/foot",
+                   "leg3/foot", "leg4/foot", "leg5/foot"]
+
+# Frames for the ground plane
+frames/ground/ground: "ground"
+frames/ground/foot: ["leg0/foot_ground", "leg1/foot_ground", "leg2/foot_ground",
+                     "leg3/foot_ground", "leg4/foot_ground", "leg5/foot_ground"]

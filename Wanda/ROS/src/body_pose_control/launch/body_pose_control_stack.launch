@@ -1,0 +1,15 @@
+<launch>
+    <!-- Argument to use the simple body pose control node in this package -->
+    <arg name="use_pose_controller" default="true"/>
+
+    <group if="$(arg use_pose_controller)">
+        <!-- Kick off the body pose controller -->
+        <include file="$(find body_pose_control)/launch/pose_control.launch" />
+    </group>
+
+    <!-- Adjust the commanded body pose for gravity -->
+    <include file="$(find body_pose_control)/launch/pose_gravity_compensation.launch" />
+
+    <!-- Low-pass filter the commanded body pose -->
+    <include file="$(find body_pose_control)/launch/pose_filter.launch" />
+</launch>

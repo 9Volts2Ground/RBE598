@@ -1,0 +1,12 @@
+# How quickly we can poll the hardware
+imu/rate: 50
+
+# Whether or not to auto-calibrate the hardware
+imu/calibrate: true
+
+# If we calibrate the IMU, how long we should run the routine for
+imu/calibration_duration: 0.5
+
+# Uncertainty properties in the IMU
+imu/acc_stddev: 0.1
+imu/gyro_stddev: 0.1

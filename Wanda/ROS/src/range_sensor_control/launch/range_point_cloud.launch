@@ -1,0 +1,19 @@
+<launch>
+    <!-- Bring in global hardware parameters -->
+    <rosparam command="load" file="$(find system_globals)/params/frames.yaml" />
+    <rosparam command="load" file="$(find topic_messages)/params/topics.yaml" />
+
+    <!-- This node interfaces with the ultrasonic range sensor server and publishes sensor data -->
+    <node
+        pkg="range_sensor_control"
+        name="range_point_cloud_node"
+        type="range_point_cloud_node"
+        output="screen"
+    >
+        <param name="sensor_frame" value="seeker/ultrasonic"/>
+        <param name="world_frame" value="seeker/ultrasonic" />
+        <param name="max_measurements" value="1" />
+        <param name="point_volume" value="true" />
+        <param name="filter_clutter" value="true" />
+    </node>
+</launch>

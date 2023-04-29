@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<robot name="wanda" xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <!-- Set colors of the components -->
+    <xacro:include filename="colors.xacro" />
+
+    <!-- Grab hardware constant values -->
+    <xacro:include filename="constants.xacro" />
+
+    <!-- Add body/chassis components -->
+    <xacro:include filename="body.urdf.xacro" />
+
+    <!-- Add the neck/seeker -->
+    <xacro:include filename="seeker.urdf.xacro" />
+
+    <!-- Process the legs -->
+    <xacro:include filename="legs.urdf.xacro" />
+
+    <!-- ros_control plugin -->
+    <gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+            <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+        </plugin>
+    </gazebo>
+</robot>

@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <!-- Handle the neck/seeker -->
+    <joint name="seeker/neck_static" type="fixed">
+        <parent link="body/body"/>
+        <child link="seeker/neck_static"/>
+        <origin xyz="0.083076 0.0 0.08995" rpy="0 0 0"/>
+    </joint>
+
+    <link name="seeker/neck_static">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+            <mass value="0.0001"/>
+            <inertia
+                ixx="1e-08" ixy="0" ixz="0"
+                iyy="1e-08" iyz="0"
+                izz="1e-08"
+            />
+        </inertial>
+    </link>
+
+    <!-- Joint where the neck mounts to the body chassis -->
+    <joint name="seeker/joint_states/azimuth" type="revolute">
+        <parent link="seeker/neck_static"/>
+        <child link="seeker/neck"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="1000.0" lower="-1.13446401" upper="1.30899694" velocity="${2*pi}"/>
+        <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+    <!-- First link of the seeker assembly -->
+    <link name="seeker/neck">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="black"/>
+            <geometry>
+                <mesh filename="package://wanda_model/meshes/neck.STL"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="package://wanda_model/meshes/neck.STL"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <origin xyz="0.0052 -0.00129 0.02812" rpy="0 0 0"/>
+            <mass value="${neck_mass}"/>
+            <inertia
+                ixx="3e-5" ixy="0.0" ixz="0.0"
+                iyy="3e-5" iyz="0.0"
+                izz="0.0"
+            />
+        </inertial>
+    </link>
+
+    <!-- Elevation servo of the seeker -->
+    <joint name="seeker/joint_states/elevation" type="revolute">
+        <parent link="seeker/neck"/>
+        <child link="seeker/seeker"/>
+        <origin xyz="0.0104 0 0.04121" rpy="${pi/2} 0 0"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="1000.0" lower="-0.2268928" upper="1.55334303" velocity="${2*pi}"/>
+        <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+    <!-- Seeker face hardware -->
+    <link name="seeker/seeker">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="red"/>
+            <geometry>
+                <mesh filename="package://wanda_model/meshes/seeker.STL"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="package://wanda_model/meshes/seeker.STL"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <origin xyz="0.02719 0.004674 0.00666" rpy="0 0 0"/>
+            <mass value="${seeker_mass}"/>
+            <inertia
+                ixx="4.9e-4" ixy="9e-5" ixz="1.3e-4"
+                iyy="4e-4"   iyz="2.2e-4"
+                izz="2.6e-4"
+            />
+        </inertial>
+    </link>
+
+    <!-- Define the sensor locations -->
+    <joint name="seeker/ultrasonic" type="fixed">
+        <parent link="seeker/seeker"/>
+        <child link="seeker/ultrasonic"/>
+        <origin xyz="0.04 -0.0065 0.0" rpy="${pi/2} 0 ${pi/2}"/>
+    </joint>
+
+    <link name="seeker/ultrasonic">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+            <mass value="0.0001"/>
+            <inertia
+                ixx="1e-08" ixy="0" ixz="0"
+                iyy="1e-08" iyz="0"
+                izz="1e-08"
+            />
+        </inertial>
+    </link>
+
+    <!-- Define the sensor locations -->
+    <joint name="seeker/camera" type="fixed">
+        <parent link="seeker/seeker"/>
+        <child link="seeker/camera"/>
+        <origin xyz="0.04782058 0.0167005 0.0" rpy="${pi/2} ${-pi/2} ${pi/2}"/>
+    </joint>
+
+    <link name="seeker/camera">
+        <inertial>
+            <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+            <mass value="0.0001"/>
+            <inertia
+                ixx="1e-08" ixy="0" ixz="0"
+                iyy="1e-08" iyz="0"
+                izz="1e-08"
+            />
+        </inertial>
+    </link>
+
+    <!-- Include Gazebo-specific elements of the seeker -->
+    <xacro:include filename="seeker.gazebo.xacro" />
+</robot>

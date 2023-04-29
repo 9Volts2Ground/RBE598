@@ -1,0 +1,16 @@
+<launch>
+    <!-- Load in the URDF model -->
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find wanda_model)/urdf/wanda.urdf.xacro'"/>
+
+    <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" >
+        <rosparam param="source_list">
+            ["leg0/joint_states",
+            "leg1/joint_states",
+            "leg2/joint_states",
+            "leg3/joint_states",
+            "leg4/joint_states",
+            "leg5/joint_states",
+            "seeker/joint_states"]
+        </rosparam>
+    </node>
+</launch>

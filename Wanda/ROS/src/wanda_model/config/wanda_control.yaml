@@ -1,0 +1,109 @@
+joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 30
+
+#================================================
+# Seeker joint controllers
+seeker:
+  controller:
+    azimuth:
+      joint: seeker/joint_states/azimuth
+      type: position_controllers/JointPositionController
+      pid: {p: 1.0, i: 1.0, d: 0.0}
+
+    elevation:
+      joint: seeker/joint_states/elevation
+      type: position_controllers/JointPositionController
+      pid: {p: 1.0, i: 1.0, d: 0.0}
+
+#================================================
+# Leg controllers
+leg0:
+  controller:
+    hip:
+      joint: leg0/joint_states/hip
+      type: position_controllers/JointPositionController
+      pid: {p: 1.0, i: 1.0, d: 0.0}
+    knee:
+      joint: leg0/joint_states/knee
+      type: position_controllers/JointPositionController
+      pid: {p: 1.0, i: 1.0, d: 0.0}
+    ankle:
+      joint: leg0/joint_states/ankle
+      type: position_controllers/JointPositionController
+      pid: {p: 1.0, i: 1.0, d: 0.0}
+
+leg1:
+  controller:
+    hip:
+      joint: leg1/joint_states/hip
+      type: position_controllers/JointPositionController
+      pid: {p: 1.0, i: 1.0, d: 0.0}
+    knee:
+      joint: leg1/joint_states/knee
+      type: position_controllers/JointPositionController
+      pid: {p: 1.0, i: 1.0, d: 0.0}
+    ankle:
+      joint: leg1/joint_states/ankle
+      type: position_controllers/JointPositionController
+      pid: {p: 1.0, i: 1.0, d: 0.0}
+
+leg2:
+  controller:
+    hip:
+      joint: leg2/joint_states/hip
+      type: position_controllers/JointPositionController
+      pid: {p: 1.0, i: 1.0, d: 0.0}
+    knee:
+      joint: leg2/joint_states/knee
+      type: position_controllers/JointPositionController
+      pid: {p: 1.0, i: 1.0, d: 0.0}
+    ankle:
+      joint: leg2/joint_states/ankle
+      type: position_controllers/JointPositionController
+      pid: {p: 1.0, i: 1.0, d: 0.0}
+
+leg3:
+  controller:
+    hip:
+      joint: leg3/joint_states/hip
+      type: position_controllers/JointPositionController
+      pid: {p: 1.0, i: 1.0, d: 0.0}
+    knee:
+      joint: leg3/joint_states/knee
+      type: position_controllers/JointPositionController
+      pid: {p: 1.0, i: 1.0, d: 0.0}
+    ankle:
+      joint: leg3/joint_states/ankle
+      type: position_controllers/JointPositionController
+      pid: {p: 1.0, i: 1.0, d: 0.0}
+
+leg4:
+  controller:
+    hip:
+      joint: leg4/joint_states/hip
+      type: position_controllers/JointPositionController
+      pid: {p: 1.0, i: 1.0, d: 0.0}
+    knee:
+      joint: leg4/joint_states/knee
+      type: position_controllers/JointPositionController
+      pid: {p: 1.0, i: 1.0, d: 0.0}
+    ankle:
+      joint: leg4/joint_states/ankle
+      type: position_controllers/JointPositionController
+      pid: {p: 1.0, i: 1.0, d: 0.0}
+
+leg5:
+  controller:
+    hip:
+      joint: leg5/joint_states/hip
+      type: position_controllers/JointPositionController
+      pid: {p: 1.0, i: 1.0, d: 0.0}
+    knee:
+      joint: leg5/joint_states/knee
+      type: position_controllers/JointPositionController
+      pid: {p: 1.0, i: 1.0, d: 0.0}
+    ankle:
+      joint: leg5/joint_states/ankle
+      type: position_controllers/JointPositionController
+      pid: {p: 1.0, i: 1.0, d: 0.0}

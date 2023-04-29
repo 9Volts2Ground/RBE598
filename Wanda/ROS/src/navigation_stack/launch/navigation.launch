@@ -1,0 +1,16 @@
+<launch>
+    <!-- Converts twist to TwistStamped topic -->
+    <include file="$(find navigation_stack)/launch/twist_conversion.launch" />
+
+    <!-- Clean up sensor data for use -->
+    <include file="$(find navigation_stack)/launch/filter_sensors.launch" />
+
+    <!-- Load in the map -->
+    <include file="$(find navigation_stack)/launch/map_server.launch" />
+
+    <!-- Do the motion planning -->
+    <include file="$(find navigation_stack)/launch/move_base.launch" />
+
+    <!-- Turn on Rviz automatically -->
+    <include file="$(find navigation_stack)/launch/wanda.launch" />
+</launch>

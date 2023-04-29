@@ -1,0 +1,7 @@
+<launch>
+    <!-- Calculate forward kinematics for the legs -->
+    <include file="$(find fkine_calcs)/launch/legs_fkine.launch" />
+
+    <!-- Calculate the forward kinematics for the seeker -->
+    <include file="$(find fkine_calcs)/launch/seeker_fkine.launch" />
+</launch>

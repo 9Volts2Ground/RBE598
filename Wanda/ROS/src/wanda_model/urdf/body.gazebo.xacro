@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <gazebo reference="body/body">
+        <material>Gazebo/DarkGray</material>
+    </gazebo>
+
+    <!-- Use the Gazebo IMU model -->
+    <xacro:include filename="imu.gazebo.xacro" />
+
+</robot>

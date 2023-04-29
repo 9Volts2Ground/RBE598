@@ -1,0 +1,38 @@
+<launch>
+    <!-- Decide if we should use simulation time in Gazebo -->
+    <arg name="use_sim_time" default="false" />
+    <param name="use_sim_time" value="$(arg use_sim_time)" />
+
+    <!-- Decide if we want to turn on the hardware or not -->
+    <arg name="hardware_enable" default="true" />
+
+    <!-- Allow users to set the system joystick number -->
+    <arg name="js_num" default="0"/>
+
+    <!-- Kick off sensors and actuators. Allow users to disable this -->
+    <group if="$(arg hardware_enable)">
+        <include file="$(find hardware_control)/launch/hardware.launch" />
+    </group>
+
+    <!-- Manages the range sensor server, publishes sensor data -->
+    <include file="$(find range_sensor_control)/launch/range_sensor_system.launch" />
+
+    <!-- Clean up sensor data for use -->
+    <include file="$(find navigation_stack)/launch/filter_sensors.launch" />
+
+    <!-- Kick off gait trajectory and inverse kinematics for the robot to walk -->
+    <include file="$(find walking_gait)/launch/walking_gait.launch" />
+
+    <!-- Compute forward kinematic TF frame calculations -->
+    <include file="$(find fkine_calcs)/launch/fkine_stack.launch" />
+
+    <!-- Processes game controller inputs to control the robot -->
+    <include file="$(find manual_control)/launch/manual_control.launch" >
+        <arg name="js_num" value="$(arg js_num)" />
+    </include>
+
+    <!-- Run the body pose filter/control management stack -->
+    <include file="$(find body_pose_control)/launch/body_pose_control_stack.launch">
+        <arg name="use_pose_controller" value="false" />
+    </include>
+</launch>

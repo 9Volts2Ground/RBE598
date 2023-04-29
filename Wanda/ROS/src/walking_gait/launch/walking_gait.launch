@@ -1,0 +1,16 @@
+<launch>
+    <!-- Controls how the walking gait operates -->
+    <include file="$(find walking_gait)/launch/gait_state_control.launch" />
+
+    <!-- Low-pass filter the commanded vector to make the robot move more smoothly -->
+    <include file="$(find walking_gait)/launch/twist_lowpass_filter.launch" />
+
+    <!-- Calculates walking twist vector uncertainty -->
+    <include file="$(find walking_gait)/launch/twist_uncertainty.launch" />
+
+    <!-- Update desired foot positions -->
+    <include file="$(find walking_gait)/launch/gait_trajectory_update.launch" />
+
+    <!-- Convert foot positions to joint states -->
+    <include file="$(find walking_gait)/launch/leg_ikine.launch" />
+</launch>

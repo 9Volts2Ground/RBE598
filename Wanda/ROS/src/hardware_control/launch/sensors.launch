@@ -1,0 +1,25 @@
+<launch>
+    <!-- Kick off camera node -->
+    <arg name="camera" default="true" />
+    <group if="$(arg camera)" >
+        <include file="$(find hardware_control)/launch/camera.launch" />
+    </group>
+
+    <!-- Kick off ultrasonic range sensor server -->
+    <arg name="ultrasonic" default="true" />
+    <group if="$(arg ultrasonic)" >
+        <include file="$(find hardware_control)/launch/ultrasonic.launch" />
+    </group>
+
+    <!-- Kick off IMU node -->
+    <arg name="imu" default="true" />
+    <group if="$(arg imu)" >
+        <include file="$(find hardware_control)/launch/imu.launch" />
+    </group>
+
+    <!-- Kick off CPU temperature monitor node -->
+    <arg name="temperature" default="true" />
+    <group if="$(arg temperature)" >
+        <include file="$(find hardware_control)/launch/cpu_temp.launch" />
+    </group>
+</launch>
